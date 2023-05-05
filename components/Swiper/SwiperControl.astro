@@ -1,0 +1,31 @@
+---
+
+import Icon from '@components/modules/Icon.astro';
+
+interface Props {
+    direction?: string;
+    ariaLabel?: string;
+    class?: string;
+    [x: string]: any;
+}
+
+const { 
+	direction, 
+	ariaLabel, 
+	class: className,
+	...rest
+} = Astro.props;
+---
+<button 
+    type="button" 
+    class:list={
+        [
+            `swiper-button-${direction == 'next' ? 'next' : 'prev'}`, 
+            className
+        ]
+    } 
+    aria-label={ariaLabel}
+    {...rest}
+>
+    <Icon name="arrow"></Icon>
+</button>

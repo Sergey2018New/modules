@@ -1,0 +1,50 @@
+/* ------- UI - Input ------- */
+input {
+	&::-ms-clear {
+		display: none;
+	}
+}
+
+.ui-input,
+.ui-textarea {
+	appearance: none;
+	display: block;
+	box-shadow: none;
+	border: 1px solid $input-border;
+	border-radius: $radius;
+	outline: none;
+	padding: 0 1.5rem;
+	width: 100%;
+	height: $input-height;
+	font-family: $font-primary;
+	font-size: $font-size-normal;
+	text-align: left;
+	color: $base-color;
+	background: $white;
+	transition: $duration background-color, $duration color, $duration border-color, $duration box-shadow;
+
+	&::placeholder {
+	  color: $placeholder;
+	  transition: $duration color;
+	}
+
+	&:focus {
+		border-color: $black;
+	}
+
+	@include disabled {
+		color: $disabled-color;
+		background-color: $disabled-background;
+	}
+
+	@include error {
+		border-color: $error;
+	}
+}
+
+.ui-textarea {
+	padding-top: 1.5rem; 
+	padding-bottom: 1.5rem;
+	height: auto;
+	resize: none;
+}

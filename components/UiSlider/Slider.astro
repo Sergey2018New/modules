@@ -1,0 +1,69 @@
+---
+interface Props {
+    min?: number;
+    max?: number;
+    step?: number;
+    value?: number;
+    valueMin?: number;
+    valueMax?: number;
+	isRange?: boolean;
+    class?: string;
+    [x: string]: any;
+}
+
+const { 
+	min = 0,
+	max = 100,
+	step = 1,
+	value = 1,
+	valueMin = 1,
+	valueMax = 100,
+	isRange = true,
+	class: className,
+	...rest
+} = Astro.props;
+
+---
+
+<div 
+	class:list={[
+		'slider', 
+		className
+	]}
+	data-slider
+	data-slider-min={min}
+	data-slider-max={max}
+	data-slider-step={step}
+	data-slider-range={isRange ? true : null}
+	{	
+		...rest
+	}
+>
+	{
+		isRange ? 
+		<div class="slider__row">
+			<div class="slider__column">
+				<div class="slider__label">От</div>
+				<div class="slider__field">
+					<input type="number" class="slider__input ui-input" data-slider-input-min min={min} max={max} value={valueMin} />
+				</div>
+			</div>
+			<div class="slider__column">
+				<div class="slider__label">До</div>
+				<div class="slider__field">
+					<input type="number" class="slider__input ui-input" data-slider-input-max min={min} max={max} value={valueMax} />
+				</div>
+			</div>
+		</div> : 
+		<input type="number" class="slider__input ui-input" data-slider-input min={min} max={max} value={value} />
+		<div class="slider__value" data-slider-value></div>
+	}
+
+	<div class="slider__ui ul-slider" data-slider-ui></div>
+</div>
+
+
+<div class="slider" data-slider data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-range>
+	
+	<div class="slider__ui ul-slider" data-slider-ui></div>
+</div>

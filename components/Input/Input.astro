@@ -1,0 +1,74 @@
+---
+interface Props {
+    type?: "text" | "email" | "textarea" | "datepicker" | "phone";
+    name?: string;
+    placeholder?: string;
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+    type = "text",
+    name,
+    placeholder,
+    class: className,
+    ...rest
+} = Astro.props;
+
+const inputClass = type == 'textarea' ? `ui-textarea` : `ui-input`;
+const inputClassPhone = `${inputClass}-phone`;
+const inputClassDatepicker = `${inputClass}-datepicker`;
+
+const classList = [
+    inputClass,
+    className,
+    {...rest}
+];
+
+---
+{type == 'textarea' ? 
+    <textarea
+        class:list={classList}
+        name={name} 
+        placeholder={placeholder}
+        {...rest}
+    ></textarea>  : ''
+}
+
+{(type == 'text' || type == 'email') ?
+<input
+    class:list={classList}
+    type={type} 
+    name={name} 
+    placeholder={placeholder}
+    {...rest}
+/> : ''}
+
+{type == 'phone' ? 
+<input 
+    class:list={[
+        inputClass,
+        inputClassPhone,
+        className,
+    ]}
+    type={'text'}
+    name={name} 
+    placeholder={placeholder}
+    autocomplete="off"
+    {...rest}
+/> : ''}
+
+{type == 'datepicker' ? 
+<input 
+    class:list={[
+        inputClass,
+        inputClassDatepicker,
+        className,
+    ]}
+    type={'text'}
+    name={name} 
+    placeholder={placeholder}
+    data-datepicker
+    autocomplete="off"
+    {...rest}
+/> : ''}

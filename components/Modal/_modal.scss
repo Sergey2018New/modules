@@ -1,0 +1,99 @@
+/* ------- Modal -------- */
+.modal {
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 200;
+	display: none;
+	width: 100%;
+	height: calc(var(--vh, 1%) * 100);
+	overflow: hidden;
+    overflow-y: auto;
+	opacity: 0;
+	background: $backdrop;
+	transition: $duration opacity;
+
+	&__close {
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 20;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 4rem;
+		height: 4rem;
+		background: transparent;
+
+		&:hover,
+		&:active {
+			.modal__close-icon {
+				transform: translateZ(0) rotate(90deg);
+			}
+		}
+	}
+
+	&__close-icon {
+		display: block;
+		width: 2rem;
+		height: 2rem;
+		fill: $primary;
+		transform: translateZ(0);
+		transition: $duration transform;
+		will-change: transform;
+	}
+ 
+	&__wrap {
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		flex-grow: 0;
+		margin: auto;
+		padding: $gutters;
+		width: 100%;
+		min-height: 100%;
+	}
+
+	&__window {
+		position: relative;
+		flex-shrink: 0;
+		flex-grow: 0;
+		padding: 5rem 3rem;
+		width: 60rem;
+		max-width: 100%;
+		background: $white;
+		transform: scale(0.8);
+		transition: $duration transform;
+		will-change: transform;
+
+		@include media(mob) {
+			padding: 3rem;
+		}
+	}
+
+	&__title {
+		margin: 0 0 2rem;
+		font-size: 2.4rem;
+		font-weight: 700;
+	}
+
+	&.is-visible {
+		display: block;
+	}
+
+	&.is-active {
+		opacity: 1;
+		transition: $duration;
+
+		.modal__window {
+			transform: scale(1);
+		}
+	}
+}
+
+.is-modal-active {
+	overflow: hidden;
+	touch-action: none;
+}

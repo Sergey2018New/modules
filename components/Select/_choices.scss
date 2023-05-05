@@ -1,0 +1,109 @@
+/* ------------ Tippy ------------ */
+/*	https://github.com/atomiks/tippyjs */
+/* -------------------------------- */
+
+@import "choices.js/public/assets/styles/choices.css";
+
+.choices {
+	$choicesRadius: 4px;
+	$choicesBorderColor: #999;
+
+	font-size: 16px;
+
+	&__inner {
+		display: flex;
+		align-items: center;
+		border-radius: $choicesRadius;
+		border-color: $choicesBorderColor;
+		height: 40px;
+		font-size: 16px;
+
+		.is-open & {
+			border-radius: $choicesRadius $choicesRadius 0 0;
+		}
+
+		.is-open &, .is-focused & {
+			border-color: $choicesBorderColor;
+		}
+
+		.is-flipped.is-open & {
+			border-radius: 0 0 $choicesRadius $choicesRadius;
+		}
+	}
+
+	&__list {
+		&--single {
+			padding: 4px 20px 4px 5px;
+
+			.choices__item {
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+		}
+
+		&--dropdown,
+		&[aria-expanded] {
+			border-color: $choicesBorderColor;
+			border-bottom-left-radius: $choicesRadius;
+			border-bottom-right-radius: $choicesRadius;
+
+			.choices__list {
+				max-height: 250px;
+
+				&::-webkit-scrollbar {
+					width: 8px;
+				}
+
+				&::-webkit-scrollbar-track{
+					background: #eee;
+				}
+
+				&::-webkit-scrollbar-thumb {
+					background: $primary;
+				}
+
+				scrollbar-base-color: #eee;
+				scrollbar-face-color:$primary;
+				scrollbar-track-color: #eee;
+				scrollbar-color: $primary #eee;
+			}
+
+			.choices__item {
+				padding: 10px 15px;
+				font-size: 16px;
+				transition: $duration color, $duration background-color;
+
+				&--selectable {
+					&.is-highlighted {
+						background-color: #eee;
+					}
+				}
+			}
+
+			.is-open & {
+				border-color: $choicesBorderColor
+			}
+		}
+	}
+
+	&[data-type*=select-one] {
+		&::after {
+			right: 12px;
+			border-width: 6px;
+			border-color: #333 transparent transparent transparent;
+			margin-top: -3px;
+		}
+
+		.choices__inner {
+			padding: 5px 10px;
+		}
+
+		&.is-open {
+			&::after {
+				border-color: transparent transparent #333 transparent;
+				margin-top: -9px;
+			}
+		}
+	}
+}

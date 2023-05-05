@@ -1,0 +1,132 @@
+---
+import Icon from '@components/modules/Icon.astro';
+
+interface Props {
+    type?: "select" | "datepicker" | "menu";
+    buttonTitle?: string;
+    value?: string;
+    inputName?: string;
+    ariaLabel?: string;
+    isSelected?: boolean;
+    isField?: boolean;
+    isSelectCountry?: boolean;
+    selectLang?: string;
+    isRequired?: boolean;
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+    type = "select",
+    buttonTitle,
+    value,
+    inputName,
+    options = [],
+    menu = [],
+    isSelected,
+    isField,
+    isSelectCountry,
+    selectLang,
+    isRequired,
+    class: className,
+    ...rest
+} = Astro.props;
+
+const listItems = options ? options : menu ? menu : [];
+
+const dropdownClass = 'ui-dropdown';
+
+const types = {
+    select: `${dropdownClass}_select`,
+    datepicker: `${dropdownClass}_datepicker`,
+};
+
+const classList =[
+    dropdownClass,
+    types[type],
+    isSelectCountry ? `${dropdownClass}_country` : '',
+    !isSelected ? 'is-placeholder' : '',
+    className 
+]
+---
+
+<div 
+    class:list={classList}
+    data-dropdown
+    {...rest}
+>
+    <button 
+        class:list={
+            [
+                `${dropdownClass}__button`,
+                isField ? `ui-input` : '',
+            ]
+        }
+        type="button" 
+        data-dropdown-button
+    >
+        {
+            isSelectCountry ? <img class={`${dropdownClass}__lang`} src={`img/flags/${selectLang}.svg`} width="40" height="40" alt="" loading="lazy" data-dropdown-lang data-lang-src={`img/flags/`} /> : ''
+        }
+        <span 
+            class:list={
+                [
+                    `${dropdownClass}__button-text`,
+                ]
+            } 
+            data-dropdown-button-text
+        >
+            <Fragment set:html={buttonTitle} />
+        </span>
+        <span class={`${dropdownClass}__button-icon-box`}><Icon class={`${dropdownClass}__button-icon`} name="arrow-down"></Icon></span>
+    </button>
+    {type === 'datepicker'  ? 
+        <input type="text" class={`${dropdownClass}__input`} value={value} name={inputName} data-dropdown-input data-datepicker readonly tabindex="-1"/>
+    : 
+    isField ? 
+        isRequired ? 
+        <input type={'text'} class:list={
+            [
+                `${dropdownClass}__input`,
+                `ui-input`,
+            ]
+        } value={value} name={inputName} data-dropdown-input readonly required data-js-form-field tabindex="-1"/>
+        : 
+        <input type={'text'} class:list={
+            [
+                `${dropdownClass}__input`,
+                `ui-input`,
+            ]
+        } value={value} name={inputName} data-dropdown-input readonly tabindex="-1"/>
+        : 
+        <input type={'hidden'} class:list={
+            [
+                `${dropdownClass}__input`,
+            ]
+        } value={value} name={inputName} data-dropdown-input/>
+    }
+    {type == 'select' || type == 'menu' ? 
+        <div class={`${dropdownClass}__popup`} data-dropdown-popup>
+                <div class={`${dropdownClass}__scroll simplebar`} data-scrollbar>
+                    <div class={`${dropdownClass}__menu`}>
+                        {listItems ? listItems.map((item, index) => (
+                            (type == 'select') ? 
+                            
+                            isSelectCountry ? 
+                                <button type="button" class={`${dropdownClass}__menu-item ${isSelected && index == 0 ? 'is-selected' : ''}`} data-dropdown-item data-value={isSelectCountry ? item.name : item} data-value-lang={item.lang} role="option">
+                                    {
+                                        <Fragment set:html={item.name} />
+                                    }
+                                </button> 
+                            :
+                            <button type="button" class={`${dropdownClass}__menu-item ${isSelected && index == 0 ? 'is-selected' : ''}`} data-dropdown-item data-value={item} role="option">
+                                <Fragment set:html={item} />
+                             </button> 
+                            
+                            : <a href="" class={`${dropdownClass}__menu-item`}><Fragment set:html={item} /></a>
+                        )) : ''}
+                    </div>
+                </div>
+        </div>
+    : '' }
+</div>

@@ -1,0 +1,18 @@
+/* ------------ Tippy ------------ */
+/*	https://github.com/atomiks/tippyjs */
+/* -------------------------------- */
+
+@import 'tippy.js/dist/tippy.css';
+
+.tippy-box {
+	font-size: 1.4rem;
+	background-color: #000;
+}
+
+.tippy-content {
+	padding: 0.5rem 1rem;
+}
+
+.tippy-arrow {
+	color: #000;
+}

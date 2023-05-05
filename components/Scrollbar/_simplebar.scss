@@ -1,0 +1,64 @@
+/* ------------- Simplebar ----------- */
+/* https://github.com/Grsmto/simplebar */
+/* ----------------------------------- */
+
+@import 'simplebar/dist/simplebar.css';
+
+.simplebar {
+	max-height: 30rem;
+	overflow: auto;
+}
+
+.simplebar-track {
+	background: transparent;
+	cursor: pointer;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 50%;
+		right: auto;
+		margin-left: -1px;
+		border-radius: 1rem;
+		width: 2px;
+		height: 100%;
+		background: $black;
+	}
+
+	&.simplebar-hover {
+		pointer-events: auto;
+	}
+}
+
+.simplebar-scrollbar {
+	cursor: pointer;
+	
+	&::before {
+		left: 50%;
+		right: auto;
+		top: 0;
+		bottom: 0;
+		margin-left: -1px;
+		border-radius: 1rem;
+		width: 2px;
+		background: rgba($black, 0.5);
+		transition: $duration background;
+	}
+
+	&.simplebar-visible::before {
+		opacity: 1;
+	}
+}
+
+.simplebar-track {
+
+	&.simplebar-hover {
+		cursor: pointer;
+	}
+
+	&.simplebar-vertical {
+		width: 2rem;
+	}
+}
+

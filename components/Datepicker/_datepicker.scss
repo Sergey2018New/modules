@@ -1,0 +1,53 @@
+/* ------- Vanillajs-datepicker ------- */
+@import 'vanillajs-datepicker/css/datepicker.css';
+
+.datepicker-view {
+    width: 28.4rem;
+}
+
+.datepicker-dropdown .datepicker-picker {
+    box-shadow: 0.3rem 0.3rem 1rem rgba($black, 0.1);
+}
+
+.datepicker-controls .button {
+    height: 2.8em;
+    font-size: 0.9em;
+    transition: $duration color, $duration background;
+}
+
+.datepicker-controls .prev-button, 
+.datepicker-controls .next-button {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+}
+.datepicker-controls .prev-button {
+    svg {
+        transform: rotate(180deg);
+    }
+}
+
+.datepicker .dow {
+    font-size: 0.8em;
+}
+
+.datepicker-header .datepicker-controls {
+    padding-bottom: 2px;
+}
+
+.datepicker-cell {
+    height: 4rem;
+    font-size: 1.4rem;
+    transition: $duration color, $duration background;
+
+    &:not(.disabled):hover {
+        background: rgba($black, 0.15);
+    }
+
+    &.selected {
+        &, &:hover {
+            background: $accent;
+        }
+    }
+}
+
+

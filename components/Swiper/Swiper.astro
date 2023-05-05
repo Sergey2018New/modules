@@ -1,0 +1,24 @@
+---
+interface Props {
+    class?: string;
+    [x: string]: any;
+}
+
+const { 
+	class: className,
+	...rest
+} = Astro.props;
+
+---
+<div 
+	class:list={[
+		'swiper', 
+		className
+	]}
+	{...rest}
+>
+    <div class="swiper-wrapper">
+        <slot /> 
+    </div>
+    <slot name="after"/>
+</div>

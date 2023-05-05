@@ -1,0 +1,125 @@
+/* ------- Dropdown ------- */
+.ui-dropdown {
+	position: relative;
+	width: fit-content;
+	max-width: 100%;
+
+	&__button {
+		position: relative;
+		display: flex;
+		align-items: center;
+		border-radius: 1rem;
+		max-width: 100%;
+		text-align: left;
+	}
+
+	&__button-text {
+		padding: 0.5rem 2.1rem 0.5rem 0;
+		max-width: 100%;
+		overflow: hidden;
+		font-weight: 600;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	&__button-icon-box {
+		position: absolute;
+		top: 50%;
+		right: 0;
+		margin-top: -0.8rem;
+
+		@include media(mob-m) {
+			margin-top: -1rem;
+		}
+	}
+
+	&__button-icon {
+		width: 1.6rem;
+		height: 1.6rem;
+		will-change: transform;
+
+		@include media(mob-m) {
+			width: 2rem;
+			height: 2rem;
+		}
+	}
+
+	&__popup {
+		position: absolute;
+		z-index: 50;
+		margin-top: 0.5rem;
+		padding: 1rem 0;
+		border-radius: 1rem;
+		box-shadow: 0.3rem 0.3rem 1rem rgba($black, 0.1);
+		width: 24rem;
+		background: $white;
+		opacity: 0;
+		visibility: hidden;
+		transition: $duration visibility, $duration opacity;
+	}
+
+	&__scroll {
+		overflow: auto;
+		max-height: 4rem * 6;
+
+		.simplebar-scrollbar {
+			&::before {
+				background: $accent;
+			}
+		}
+	}
+
+	&__input {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		margin: 0;
+		overflow: hidden;
+		opacity: 0;
+		background: none;
+		pointer-events: none;
+	}
+
+	&__menu-item {
+		display: block;
+		padding: 1rem 2rem;
+		width: 100%;
+		font-weight: 600;
+		font-size: 1.4rem;
+		line-height: 1.42;
+		text-decoration: none;
+		text-align: left;
+		transition: $duration color, $duration background;
+		cursor: pointer;
+		user-select: none;
+
+		&:hover,
+		&:focus-visible {
+			color: $accent;
+		}
+
+		&:focus-visible {
+			outline: none;
+		}
+
+		&.is-selected {
+			display: none;	
+		}
+	}
+
+	@include active {
+		.ui-dropdown {
+			&__button-icon {
+				top: 1px;
+				transform: rotate(180deg);
+			}
+
+			&__popup {
+				opacity: 1;
+				visibility: visible;
+				pointer-events: auto;
+			}
+		}
+	}
+}
