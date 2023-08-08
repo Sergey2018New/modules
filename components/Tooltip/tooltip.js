@@ -1,11 +1,11 @@
 import tippy from 'tippy.js';
 
-export function tooltip(tooltipContainer) {
-	/*
-		Tippyjs
-		https://atomiks.github.io/tippyjs/
-	*/
+/*
+	Tippyjs
+	https://atomiks.github.io/tippyjs/
+*/
 
+export default function tooltip(tooltipContainer) {
 	let tooltips;
 
 	if (tooltipContainer) {
@@ -15,31 +15,33 @@ export function tooltip(tooltipContainer) {
 	} else {
 		tooltips = document.querySelectorAll('[data-tooltip]');
 	}
+
+	if (tooltips.length) {
+		const tooltipInit = (tooltip) => {
+			tooltip.setAttribute('data-tooltip-init', '');
 	
-
-	if (!tooltips) return;
-
-	for (let i = 0; i < tooltips.length; i++) {
-		const tooltip = tooltips[i];
-		
-		if (!tooltip.hasAttribute('data-tooltip-init')) {
-			tooltipInit(tooltip);
+			let tooltipContent = tooltip.getAttribute('title') || tooltip.getAttribute('data-tooltip-content') || '';
+			let tooltipTrigger = tooltip.getAttribute('data-tooltip-trigger') || 'focus';
+	
+			if (tooltipContent) {
+				tippy(tooltip, {
+					content: tooltip.getAttribute('title') || tooltip.getAttribute('data-tooltip-content') || '',
+					allowHTML: true,
+					trigger: tooltipTrigger,
+					placement: 'top-start',
+					maxWidth: 300,
+					animation: 'shift-toward',
+					offset: 0,
+				});
+			}
 		}
-	}
-
-	function tooltipInit(tooltip) {
-		
-		tooltip.setAttribute('data-tooltip-init', '');
-
-		let tooltipContent = tooltip.getAttribute('title') || tooltip.getAttribute('data-tooltip-content') || '';
-		let tooltipTrigger = tooltip.getAttribute('data-tooltip-trigger') || 'mouseenter focus';
-
-		if (tooltipContent) {
-			tippy(tooltip, {
-				content: tooltip.getAttribute('title') || tooltip.getAttribute('data-tooltip-content') || '',
-				allowHTML: true,
-				trigger: tooltipTrigger,
-			});
+	
+		for (let i = 0; i < tooltips.length; i++) {
+			const tooltip = tooltips[i];
+			
+			if (!tooltip.hasAttribute('data-tooltip-init')) {
+				tooltipInit(tooltip);
+			}
 		}
 	}
 }

@@ -1,0 +1,49 @@
+---
+interface Props {
+	isSelect?: boolean;
+	value?: number;
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+    isSelect,
+    value = 3,
+	class: className,
+	...rest
+} = Astro.props;
+
+const values = [1,2,3,4,5];
+---
+<div
+        class:list={[
+            'rating',
+            className,
+        ]}
+        data-rating={value}
+        {...rest}
+    >
+        <div class="rating__group">
+            {
+                isSelect ?
+                values.map((item) => (
+                    <button type="button" class="rating__item" aria-label={`Поставить оценку ${item}`} data-rating-item={item}>
+                        <svg class="rating__icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 1.15782L15.0123 7.44919L15.1291 7.69319L15.3972 7.7289L22.3115 8.64958L17.2589 13.4586L17.063 13.6451L17.1119 13.9111L18.3729 20.7715L12.2379 17.4522L12 17.3235L11.7621 17.4522L5.62713 20.7715L6.88814 13.9111L6.93704 13.6451L6.74109 13.4586L1.68848 8.64958L8.60277 7.7289L8.87092 7.69319L8.98774 7.44919L12 1.15782Z"/>
+                        </svg>
+                    </button>
+                ))
+                :
+                values.map(() => (
+                    <div class="rating__item">
+                        <svg class="rating__icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 1.15782L15.0123 7.44919L15.1291 7.69319L15.3972 7.7289L22.3115 8.64958L17.2589 13.4586L17.063 13.6451L17.1119 13.9111L18.3729 20.7715L12.2379 17.4522L12 17.3235L11.7621 17.4522L5.62713 20.7715L6.88814 13.9111L6.93704 13.6451L6.74109 13.4586L1.68848 8.64958L8.60277 7.7289L8.87092 7.69319L8.98774 7.44919L12 1.15782Z"/>
+                        </svg>
+                    </div>
+                ))
+            }
+        </div>
+        {
+            isSelect ? <input type="hidden" data-rating-input value={value} /> : ''
+        }
+    </div>

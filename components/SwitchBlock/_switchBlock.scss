@@ -1,0 +1,83 @@
+/* ------- UI - Switch Block ------- */
+.ui-switch-block {
+	position: relative;
+	padding: 0.5rem;
+	border: 1px solid $accent;
+	border-radius: 3rem;
+    width: fit-content;
+
+	&__button {
+		position: relative;
+		display: grid;
+		grid-auto-flow: column;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0 1.5rem;
+		border-radius: calc($button-height * 0.5);
+		height: $button-height;
+		font-size: var(--text-size);
+		color: $base-color;
+		transition: $duration color, $duration background;
+        white-space: nowrap;
+		user-select: none;
+
+		&.is-active {
+            padding-left: 1.5rem;
+			color: $white;
+		}
+	}
+
+    &__icon {
+        margin-left: -0.5rem;
+    }
+
+	&__inner {
+		position: relative;
+	}
+
+	&__background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 0;
+		border-radius: calc($button-height * 0.5);
+		height: $button-height;
+		background: $accent;
+		transition: $duration width, $duration transform;
+		will-change: width, transform;
+	}
+
+	&__menu {
+		display: flex;
+	}
+
+	&__label {
+		display: flex;
+		font-weight: inherit;
+		cursor: pointer;
+	}
+
+	&__checkbox {
+		position: absolute;
+		margin: 0;
+		width: 0;
+		height: 0;
+		opacity: 0;
+
+		&:focus-visible {
+			~ .ui-switch-block__checkbox-focused {
+				outline: 0.2rem solid $accent;
+				outline-offset: 0.3rem;
+			}
+		}
+	}
+
+	&__checkbox-focused {
+		position: absolute;
+		top: -0.5rem;
+		bottom: -0.5rem;
+		left: -0.5rem;
+		right: -0.5rem;
+		border-radius: 10rem;
+	}
+}

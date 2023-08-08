@@ -14,10 +14,9 @@
 	}
 
 	&__button-text {
-		padding: 0.5rem 2.1rem 0.5rem 0;
+		padding: 0.5rem 2rem 0.5rem 0;
 		max-width: 100%;
 		overflow: hidden;
-		font-weight: 600;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
@@ -37,11 +36,6 @@
 		width: 1.6rem;
 		height: 1.6rem;
 		will-change: transform;
-
-		@include media(mob-m) {
-			width: 2rem;
-			height: 2rem;
-		}
 	}
 
 	&__popup {
@@ -55,6 +49,7 @@
 		background: $white;
 		opacity: 0;
 		visibility: hidden;
+		pointer-events: none;
 		transition: $duration visibility, $duration opacity;
 	}
 
@@ -67,6 +62,28 @@
 				background: $accent;
 			}
 		}
+
+        @include media-min(1025) {
+            scrollbar-width: thin;
+            scrollbar-color: rgba($black, 0.3);
+
+            &::-webkit-scrollbar {
+                width: 1rem;
+                cursor: pointer;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                border-left: 0.4rem solid $white;
+                border-right: 0.4rem solid $white;
+                background: rgba($black, 0.3);
+                transition: $duration background;
+            }
+
+            &::-webkit-scrollbar-track {
+              margin: 0.5rem 0;
+              background: transparent;
+            }
+        }
 	}
 
 	&__input {
@@ -85,33 +102,31 @@
 		display: block;
 		padding: 1rem 2rem;
 		width: 100%;
-		font-weight: 600;
-		font-size: 1.4rem;
-		line-height: 1.42;
+		font-size: var(--text-size);
+		line-height: 1.4;
 		text-decoration: none;
 		text-align: left;
 		transition: $duration color, $duration background;
 		cursor: pointer;
 		user-select: none;
 
-		&:hover,
-		&:focus-visible {
+		&:hover {
 			color: $accent;
 		}
 
 		&:focus-visible {
 			outline: none;
+			background: rgba($black, 0.1);
 		}
 
 		&.is-selected {
-			display: none;	
+			display: none;
 		}
 	}
 
 	@include active {
 		.ui-dropdown {
 			&__button-icon {
-				top: 1px;
 				transform: rotate(180deg);
 			}
 

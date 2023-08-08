@@ -1,0 +1,50 @@
+---
+interface Props {
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+    class: className,
+    ...rest
+} = Astro.props;
+
+const menu = [
+    {
+        text: 'Услуги',
+    },
+    {
+        text: 'О нас',
+    },
+    {
+        text: 'Контакты',
+    },
+]
+---
+<div
+    class:list={[
+        "menu",
+        className,
+        "js-menu",
+    ]}
+    {...rest}
+>
+    <div class="menu__backdrop js-menu-backdrop"></div>
+    <button class="menu__burger js-menu-burger" type="button" aria-label="Навигационное меню">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="menu__popup js-menu-popup" aria-disabled="true">
+        <nav class="menu__container">
+            <ul class="menu__list">
+                {menu.map((item) => (
+                    <li>
+                        <a href="" class="menu__link"><span set:html={item.text}></span></a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+        <button type="button" class="menu__close js-menu-close" aria-label="Закрыть"></button>
+    </div>
+</div>

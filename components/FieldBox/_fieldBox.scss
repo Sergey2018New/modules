@@ -1,0 +1,57 @@
+/* ------- Field Box ------- */
+.field-box {
+	position: relative;
+
+	&__label {
+		position: absolute;
+        top: 0.7rem;
+		width: 100%;
+        font-size: $base-font-size;
+        font-weight: 400;
+        color: $placeholder;
+		transform-origin: 0 0;
+		transition: transform $duration;
+		pointer-events: none;
+		will-change: transform;
+	}
+
+	&__input {
+        padding: 0;
+        border-width: 0;
+        border-bottom-width: 1px;
+        width: 100%;
+
+		&::placeholder {
+			color: transparent;
+		}
+	}
+
+    &__content {
+        width: 100%;
+    }
+
+    &__textarea {
+        min-height: 13rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    &_textarea {
+        .field-box {
+            &__label {
+                background: $white;
+            }
+        }
+    }
+
+	&.is-filed,
+	&.is-focused {
+		.field-box__label {
+			transform: translateY(-1.6rem) scale(0.75);
+		}
+
+        .field-box__input:not(.is-error) {
+            border-bottom-color: $base-color;
+		}
+	}
+}

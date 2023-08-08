@@ -6,23 +6,22 @@
 
 .swiper-button-next,
 .swiper-button-prev {
-	width: 4.8rem;
-	height: 4.8rem;
+	width: 4rem;
+	height: 4rem;
 	margin-top: 0;
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: $primary;
-	background: $white;
-	
+	color: $white;
+	background: $accent;
 	transition: $duration background, $duration color, $duration border-color, $duration opacity;
 	cursor: pointer;
 	transform: translateY(-50%);
 
 	@include media(mob-m) {
-		width: 3.2rem;
-		height: 3.2rem;
+		width: 3rem;
+		height: 3rem;
 	}
 
 	&::after {
@@ -42,12 +41,12 @@
 	}
 
 	@include hover {
-		color: $white;
-		background: $accent;
+		color: $accent;
+		background: $white;
 	}
 
 	&.swiper-button-disabled {
-		opacity: 0;
+		opacity: 0.2;
 	}
 	
 	@media (hover: hover) {
@@ -71,32 +70,24 @@
 	width: 1rem;
 	height: 1rem;
 	margin: 0;
-	background-color: var(--color-black-15);
+	background-color: rgba($black, 0.3);
 	opacity: 1;
 	transition: $duration background-color, $duration border-color, $duration opacity, $duration transform;
 	pointer-events: auto;
 	will-change: transform;
-
-	@include media(mob-m) {
-		width: 0.5rem;
-		height: 0.5rem;
-	}
 }
 
 .swiper-pagination-bullet-active {
 	background-color: $accent;
 	opacity: 1;
 	transform: scale(1.4);
-
-	@include media(mob-m) {
-		transform: scale(1.6);
-	}
 }
 
 .swiper-pagination {
 	z-index: 10;
-	display: flex;
+	display: grid;
 	justify-content: center;
+	gap: 1rem;
 	padding: 1rem 0;
 	pointer-events: none;
 }
@@ -105,12 +96,7 @@
 	bottom: 0;
 
 	.swiper-pagination-bullet {
-		margin: 0 1.2rem;
-
-		@include media(mob-m) {
-			margin-left: 0.6rem;
-			margin-right: 0.6rem;
-		}
+		margin: 0;
 	}
 }
 
@@ -120,8 +106,9 @@
 		.swiper-button-prev {
 			opacity: 1;
 		}
+
 		.swiper-button-disabled {
-			opacity: 0;
+			opacity: 0.2;
 		}
 	}
 }

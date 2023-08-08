@@ -2,31 +2,45 @@
     &__header {
         position: relative;
         width: 100%;
-        display: flex;
+        display: grid;
         align-items: center;
-        gap: 2rem;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 4rem;
         padding: 2rem;
         text-align: left;
         background: #eee;
         cursor: pointer;
         user-select: none;
+        transition: $duration background;
+
+        &:hover {
+            background: #ddd;
+        }
+
+        &:focus-visible {
+            outline: none;
+            background: #ddd;
+        }
     }
 
     &__icon {
         position: relative;
-        flex: none;
         width: 3rem;
         height: 3rem;
-        margin-left: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-        svg {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            margin-left: -1rem;
-            margin-top: -1rem;
+        &::before {
+            content: "";
+            display: block;
             width: 2rem;
             height: 2rem;
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='6' viewBox='0 0 11 6' fill='none'%3E%3Cpath d='M1 0.75L5.5 5.25L10 0.75' stroke='%231A1A1A'/%3E%3C/svg%3E");
+            mask-size: 100%;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            background: $black;
             transition: $duration transform;
             will-change: transform;
         }
@@ -50,7 +64,7 @@
                 margin-top: -1px;
                 width: 2rem;
                 height: 2px;
-                background: #000;
+                background: $black;
                 transition: $duration opacity;
             }
 
@@ -65,21 +79,29 @@
     }
 
     &__content {
-        overflow: hidden;
         max-height: 0;
-        transition: max-height $duration ease-out;
+        overflow: hidden;
+        visibility: hidden;
+        opacity: 0;
+        transition: max-height $duration ease-out, visibility $duration, opacity $duration;
     }
 
     &.is-active {
         .accordion__icon {
+            &::before {
+                transform: rotate(180deg);
+            }
+
             span {
                 &::after {
                     opacity: 0;
                 }
             }
-            svg {
-                transform: rotate(180deg);
-            }
+        }
+
+        .accordion__content {
+            visibility: visible;
+            opacity: 1;
         }
     }
 

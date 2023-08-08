@@ -1,0 +1,38 @@
+---
+interface Props {
+    name?: string;
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+    items = [],
+    name,
+    ariaLabel,
+    class: className,
+    ...rest
+} = Astro.props;
+
+const classList = [
+    'ui-radio-block',
+    className,
+]
+---
+
+<div
+    class:list={classList}
+    {...rest}
+>
+    <fieldset class={`ui-radio-block__fieldset`} role="group" aria-label={ariaLabel}>
+        {items.map((item) => (
+            <label class:list={[
+                "ui-radio-block__item",
+                item.isActive ? 'is-active' : ''
+            ]}>
+                <input type="radio" class="ui-radio-block__input" name={name} value={item.value} checked={item.checked} />
+                <span class="ui-radio-block__text" set:html={item.text}></span>
+                <span class="ui-radio-block__checked"></span>
+            </label>
+        ))}
+    </fieldset>
+</div>

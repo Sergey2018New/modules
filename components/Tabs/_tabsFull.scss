@@ -1,0 +1,94 @@
+/* ------- tabs -------- */
+@keyframes fadeEffect {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.tabs-menu {
+    &__inner {
+        display: flex;
+        align-items: center;
+    }
+
+    &__content {
+        position: relative;
+        width: fit-content;
+        padding-bottom: 0.4rem;
+    }
+
+    &__list {
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: flex-start;
+        gap: 1rem;
+    }
+
+    &__item {
+        position: relative;
+        z-index: 1;
+        padding: 0 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 4rem;
+        text-align: center;
+        background: lightgrey;
+        transition: $duration color, $duration background;
+        cursor: pointer;
+
+        &.is-active {
+            color: $white;
+            background: $accent;
+        }
+    }
+
+    &__nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 4rem;
+        height: 4rem;
+        text-align: center;
+        transition: $duration opacity;
+        user-select: none;
+
+        &.is-disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+    }
+
+    &__button {
+        @include media-min(mob) {
+            display: none;
+        }
+    }
+
+    &__overlay {
+        position: absolute;
+        height: 0.2rem;
+        bottom: 0;
+        left: 0;
+        background: $accent;
+        transition: $duration left;
+    }
+}
+
+.tabs {
+    &__menu {
+        margin-bottom: 1rem;
+    }
+
+    &__pane {
+        display: none;
+        animation: fadeEffect 0.6s linear;
+
+        &.is-active {
+            display: block;
+        }
+    }
+}

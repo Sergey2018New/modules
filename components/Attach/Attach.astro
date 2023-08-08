@@ -1,0 +1,32 @@
+---
+interface Props {
+    text?: string;
+    name?: string;
+    accept?: string;
+    ariaLabel?: string;
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+    text = 'Прикрепить файл',
+    name = 'file',
+    accept = '',
+    ariaLabel = 'Прикрепить файл',
+    class: className,
+    ...rest
+} = Astro.props;
+---
+
+<div class:list={[
+    "ui-attach",
+    className,
+]} data-attach
+    {...rest}
+>
+    <label class="ui-attach__label">
+        <input type="file" class="ui-attach__input" aria-label={ariaLabel} name={name} data-attach-input accept={accept} />
+        <span class="ui-attach__text" data-attach-text set:html={text}></span>
+        <span class="ui-attach__focused"></span>
+    </label>
+</div>

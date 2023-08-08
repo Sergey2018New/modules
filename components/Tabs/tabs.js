@@ -1,7 +1,7 @@
 /*
-	  -------- 
+	  --------
 	|   TABS   |
-	  -------- 
+	  --------
 
 	* Basic Attributes:
 		* data-tabs - general wrapper for tabs
@@ -28,11 +28,10 @@
 		* data-tabs-switch-pane - an attribute that specifies a specific tab from the data-tabs-pane attribute
 */
 
+/**
+    * @param  {Element} tabsContainer - HTML container element, default document
+*/
 export default function tabs(tabsContainer) {
-	/* 
-		@param  {Element} tabsContainer - HTML container element, default document
-	*/
-
 	let tabsElements;
 
 	if (tabsContainer) {
@@ -43,200 +42,198 @@ export default function tabs(tabsContainer) {
 		tabsElements = document.querySelectorAll('[data-tabs]');
 	}
 
-	if (!tabsElements) return;
+    if (tabsElements.length) {
+        const changeOverlay = (tabsCurrent, tabsOverlay) => {
+            setTimeout(() => {
+                const tabActive = tabsCurrent.querySelector('[data-tabs-item].is-active');
 
-	tabsElements.forEach(tabs => {
+                if (tabsOverlay && tabActive) {
+                    tabsOverlay.style.width = `${tabActive.offsetWidth}px`;
+                    tabsOverlay.style.left = `${tabActive.offsetLeft}px`;
+                }
+            },10);
+        }
 
-		if (!tabs.hasAttribute('data-tabs-init')) {
-			tabsInit();
-		}
+        const moveTab = (tabs, tabCurrent, tabsButton) => {
+            if (!tabs || !tabCurrent) return;
 
-		function tabsInit() {
-			const tabsButton = tabs.querySelector('[data-tabs-button]');
-			const tabsMenu = tabs.querySelector('[data-tabs-menu]');
-			const tabsList = tabs.querySelector('[data-tabs-list]');
-			const tabsItems = tabsMenu ? tabsMenu.querySelectorAll('[data-tabs-item]') : '';
-			const tabsOverlay = tabs.querySelector('[data-tabs-overlay]');
-			const tabsPrev = tabs.querySelector('[data-tabs-prev]');
-			const tabsNext = tabs.querySelector('[data-tabs-next]');
+            const tabActive = tabs.querySelector('[data-tabs-item].is-active');
 
-			tabs.setAttribute('data-tabs-init', '');
+            let panelActive;
+            let panelCurrent = tabs.querySelector(`[data-tabs-pane="${tabCurrent.getAttribute('data-tabs-item')}"]`);
 
-			changeOverlay(tabs, tabsOverlay);
-			isDisabledTabNavigation(tabs, tabsPrev, tabsNext);
+            if (tabActive) {
+                tabActive.classList.remove('is-active');
+                panelActive = tabs.querySelector(`[data-tabs-pane="${tabActive.getAttribute('data-tabs-item')}"]`);
+            }
 
-			window.addEventListener('resize', () => {
-				changeOverlay(tabs, tabsOverlay);
-			});
+            if (panelActive) {
+                panelActive.classList.remove('is-active');
+            }
 
-			if (tabsItems) {
-				tabsItems.forEach(tabItem => {
-					tabItem.addEventListener('click', (event) => {
-						const target = event.currentTarget;
+            tabCurrent.classList.add('is-active');
 
-						moveTab(tabs, target, tabsButton);
-						changeOverlay(tabs, tabsOverlay);
-						isDisabledTabNavigation(tabs, tabsPrev, tabsNext);
-					});
-				});
-			}
+            if (panelCurrent) {
+                panelCurrent.classList.add('is-active');
+            }
 
-			if (tabsPrev) {
-				tabsPrev.addEventListener('click', (e) => {
-					e.preventDefault();
+            if (tabsButton) {
+                const tabsButtonText = tabsButton.querySelector('[data-tabs-button-text]');
 
-					tabNavigation(tabs, tabsOverlay, 'prev');
-					isDisabledTabNavigation(tabs, tabsPrev, tabsNext);
-				});
-			}
+                if (tabsButtonText) {
+                    tabsButtonText.textContent = tabCurrent.getAttribute('data-value') || '';
+                }
+            }
+        }
 
-			if (tabsNext) {
-				tabsNext.addEventListener('click', (e) => {
-					e.preventDefault();
+        const closeTabsList =  () => {
+            const tabsButtonActive = document.querySelector('[data-tabs-button].is-active');
+            const tabsListActive = document.querySelector('[data-tabs-list].is-active');
 
-					tabNavigation(tabs, tabsOverlay, 'next');
-					isDisabledTabNavigation(tabs, tabsPrev, tabsNext);
-				}); 
-			}
+            if (tabsButtonActive) {
+                tabsButtonActive.classList.remove('is-active');
+            }
+            if (tabsListActive) {
+                tabsListActive.classList.remove('is-active');
+            }
+        }
 
-			if (tabsButton) {
-				tabsButton.addEventListener('click', (e) => {
-					e.preventDefault();
+        const tabNavigation = (tabs, tabsOverlay, direction) => {
+            if (!tabs) return;
 
-					tabsButton.classList.toggle('is-active');
+            let tabActive = tabs.querySelector('[data-tabs-item].is-active');
+            let tabsButton = tabs.querySelector('[data-tabs-button]');
 
-					if (tabsList) {
-						tabsList.classList.toggle('is-active');
-					}
-				});
-			}
-		}
-	});
+            if (tabActive) {
+                let tabCurrent = tabActive.nextElementSibling;
 
-	document.addEventListener('click', (event) => {
-		let target = event.target;
+                if (direction == 'prev') {
+                    tabCurrent = tabActive.previousElementSibling;
+                }
 
-		if (target.hasAttribute('data-tabs-switch') || target.closest('[data-tabs-switch]')) {
-			event.preventDefault();
-			
-			const tabsSwitch = document.querySelector(`[data-tabs="${target.getAttribute('data-tabs-switch')}"]`);
+                if (tabCurrent) {
+                    moveTab(tabs, tabCurrent, tabsButton);
 
-			if (tabsSwitch) {
-				const tabsPrev = tabsSwitch.querySelector('[data-tabs-prev');
-				const tabsNext = tabsSwitch.querySelector('[data-tabs-next');
-				const tabCurrent = tabsSwitch.querySelector(`[data-tabs-item="${target.getAttribute('data-tabs-switch-pane')}"]`);
-				const tabsOverlay = tabsSwitch.querySelector('[data-tabs-overlay]');
-				const tabsButton = tabsSwitch.querySelector('[data-tabs-button]');
-				
-				if (tabCurrent) {
-					moveTab(tabsSwitch, tabCurrent, tabsButton);
-					changeOverlay (tabsSwitch, tabsOverlay);
-					isDisabledTabNavigation(tabsSwitch, tabsPrev, tabsNext);
-				}
-			}
-		}
+                    if (tabsOverlay) {
+                        changeOverlay (tabs, tabsOverlay);
+                    }
+                }
+            }
+        }
 
-		if (!target.hasAttribute('data-tabs-button') && !target.closest('[data-tabs-button]')) {
-			closeTabsList();
-		}
-	});
+        const isDisabledTabNavigation = (tabs, tabNavPrev, tabNavNext) => {
+            let tabActive = tabs.querySelector('[data-tabs-item].is-active');
 
+            if (tabNavPrev) {
+                if (tabActive.previousElementSibling) {
+                    tabNavPrev.classList.remove('is-disabled');
+                } else {
+                    tabNavPrev.classList.add('is-disabled');
+                }
+            }
 
-	function changeOverlay (tabsCurrent, tabsOverlay) {
-		setTimeout(() => {
-			const tabActive = tabsCurrent.querySelector('[data-tabs-item].is-active');
+            if (tabNavNext) {
+                if (tabActive.nextElementSibling) {
+                    tabNavNext.classList.remove('is-disabled');
+                } else {
+                    tabNavNext.classList.add('is-disabled');
+                }
+            }
+        }
 
-			if (tabsOverlay && tabActive) {
-				tabsOverlay.style.width = `${tabActive.offsetWidth}px`;
-				tabsOverlay.style.left = `${tabActive.offsetLeft}px`;
-			}
-		},10);
-	}
+        tabsElements.forEach((tabs) => {
+            const tabsInit = () => {
+                const tabsButton = tabs.querySelector('[data-tabs-button]');
+                const tabsMenu = tabs.querySelector('[data-tabs-menu]');
+                const tabsList = tabs.querySelector('[data-tabs-list]');
+                const tabsItems = tabsMenu ? tabsMenu.querySelectorAll('[data-tabs-item]') : '';
+                const tabsOverlay = tabs.querySelector('[data-tabs-overlay]');
+                const tabsPrev = tabs.querySelector('[data-tabs-prev]');
+                const tabsNext = tabs.querySelector('[data-tabs-next]');
 
-	function moveTab(tabs, tabCurrent, tabsButton) {
-		if (!tabs || !tabCurrent) return;
+                tabs.setAttribute('data-tabs-init', '');
 
-		const tabActive = tabs.querySelector('[data-tabs-item].is-active');
+                changeOverlay(tabs, tabsOverlay);
+                isDisabledTabNavigation(tabs, tabsPrev, tabsNext);
 
-		let panelActive;
-		let panelCurrent = tabs.querySelector(`[data-tabs-pane="${tabCurrent.getAttribute('data-tabs-item')}"]`);
+                window.addEventListener('resize', () => {
+                    changeOverlay(tabs, tabsOverlay);
+                });
 
-		if (tabActive) {
-			tabActive.classList.remove('is-active');
-			panelActive = tabs.querySelector(`[data-tabs-pane="${tabActive.getAttribute('data-tabs-item')}"]`);
-		}
+                if (tabsItems) {
+                    tabsItems.forEach(tabItem => {
+                        tabItem.addEventListener('click', (event) => {
+                            const target = event.currentTarget;
 
-		if (panelActive) {
-			panelActive.classList.remove('is-active');
-		}
+                            moveTab(tabs, target, tabsButton);
+                            changeOverlay(tabs, tabsOverlay);
+                            isDisabledTabNavigation(tabs, tabsPrev, tabsNext);
+                        });
+                    });
+                }
 
-		tabCurrent.classList.add('is-active');
-		
-		if (panelCurrent) {
-			panelCurrent.classList.add('is-active');
-		}
+                if (tabsPrev) {
+                    tabsPrev.addEventListener('click', (e) => {
+                        e.preventDefault();
 
-		if (tabsButton) {
-			const tabsButtonText = tabsButton.querySelector('[data-tabs-button-text]');
+                        tabNavigation(tabs, tabsOverlay, 'prev');
+                        isDisabledTabNavigation(tabs, tabsPrev, tabsNext);
+                    });
+                }
 
-			if (tabsButtonText) {
-				tabsButtonText.textContent = tabCurrent.getAttribute('data-value') || '';
-			}
-		}
-	}
+                if (tabsNext) {
+                    tabsNext.addEventListener('click', (e) => {
+                        e.preventDefault();
 
-	function closeTabsList () {
-		const tabsButtonActive = document.querySelector('[data-tabs-button].is-active');
-		const tabsListActive = document.querySelector('[data-tabs-list].is-active');
+                        tabNavigation(tabs, tabsOverlay, 'next');
+                        isDisabledTabNavigation(tabs, tabsPrev, tabsNext);
+                    });
+                }
 
-		if (tabsButtonActive) {
-			tabsButtonActive.classList.remove('is-active');
-		}
-		if (tabsListActive) {
-			tabsListActive.classList.remove('is-active');
-		}
-	}
+                if (tabsButton) {
+                    tabsButton.addEventListener('click', (e) => {
+                        e.preventDefault();
 
-	function tabNavigation(tabs, tabsOverlay, direction) {
-		if (!tabs) return;
+                        tabsButton.classList.toggle('is-active');
 
-		let tabActive = tabs.querySelector('[data-tabs-item].is-active');
-		let tabsButton = tabs.querySelector('[data-tabs-button]');
+                        if (tabsList) {
+                            tabsList.classList.toggle('is-active');
+                        }
+                    });
+                }
+            }
 
-		if (tabActive) {
-			let tabCurrent = tabActive.nextElementSibling;
+            if (!tabs.hasAttribute('data-tabs-init')) {
+                tabsInit();
+            }
+        });
 
-			if (direction == 'prev') {
-				tabCurrent = tabActive.previousElementSibling;
-			}
+        document.addEventListener('click', (event) => {
+            let target = event.target;
 
-			if (tabCurrent) {
-				moveTab(tabs, tabCurrent, tabsButton);
+            if (target.hasAttribute('data-tabs-switch') || target.closest('[data-tabs-switch]')) {
+                event.preventDefault();
 
-				if (tabsOverlay) {
-					changeOverlay (tabs, tabsOverlay); 
-				}
-			}
-		}
-	}
+                const tabsSwitch = document.querySelector(`[data-tabs="${target.getAttribute('data-tabs-switch')}"]`);
 
-	function isDisabledTabNavigation(tabs, tabNavPrev, tabNavNext) {
-		let tabActive = tabs.querySelector('[data-tabs-item].is-active');
+                if (tabsSwitch) {
+                    const tabsPrev = tabsSwitch.querySelector('[data-tabs-prev');
+                    const tabsNext = tabsSwitch.querySelector('[data-tabs-next');
+                    const tabCurrent = tabsSwitch.querySelector(`[data-tabs-item="${target.getAttribute('data-tabs-switch-pane')}"]`);
+                    const tabsOverlay = tabsSwitch.querySelector('[data-tabs-overlay]');
+                    const tabsButton = tabsSwitch.querySelector('[data-tabs-button]');
 
-		if (tabNavPrev) {
-			if (tabActive.previousElementSibling) {
-				tabNavPrev.classList.remove('is-disabled');
-			} else {
-				tabNavPrev.classList.add('is-disabled');
-			}
-		}
+                    if (tabCurrent) {
+                        moveTab(tabsSwitch, tabCurrent, tabsButton);
+                        changeOverlay (tabsSwitch, tabsOverlay);
+                        isDisabledTabNavigation(tabsSwitch, tabsPrev, tabsNext);
+                    }
+                }
+            }
 
-		if (tabNavNext) {
-			if (tabActive.nextElementSibling) {
-				tabNavNext.classList.remove('is-disabled');
-			} else {
-				tabNavNext.classList.add('is-disabled');
-			}
-		}
-	}
+            if (!target.hasAttribute('data-tabs-button') && !target.closest('[data-tabs-button]')) {
+                closeTabsList();
+            }
+        });
+    }
 }

@@ -1,0 +1,35 @@
+---
+interface Props {
+    size?: number;
+    value?: number;
+    strokeWidth?: number;
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+    size = 100,
+    value = 50,
+    strokeWidth = 10,
+    class: className,
+    ...rest
+} = Astro.props;
+
+const radius = size * 0.5 - strokeWidth * 0.5;
+---
+
+<svg
+    class:list={[
+        'progress-ring',
+        className,
+    ]}
+    height={size}
+    width={size}
+    viewBox={`0 0 ${size} ${size}`}
+    data-progress-ring
+    data-value={value}
+    {...rest}
+>
+    <circle class="progress-ring__circle" cx={size * 0.5} cy={size * 0.5} r={radius} fill="none" stroke-width={strokeWidth} data-progress-ring-backdrop/>
+    <circle class="progress-ring__circle" cx={size * 0.5} cy={size * 0.5} r={radius} fill="none" stroke-width={strokeWidth} data-progress-ring-sector/>
+</svg>

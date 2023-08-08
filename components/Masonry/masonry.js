@@ -8,12 +8,12 @@ export default function masonry() {
  
 	const grids = document.querySelectorAll('[data-masonry]');
 
-	if (!grids.length) return;
-
-	grids.forEach(item => {
-		const msnry = new Masonry(item, {
-			columnWidth: 200,
-			itemSelector: '[data-masonry-item]',
+	if (grids.length) {
+		grids.forEach((item) => {
+			new Masonry(item, {
+				columnWidth: 200,
+				itemSelector: '[data-masonry-item]',
+			});
 		});
-	});
+	}
 }

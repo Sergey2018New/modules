@@ -1,0 +1,79 @@
+---
+import Icon from '@components/modules/Icon.astro';
+
+interface Props {
+    type?: "toggle" | "menu";
+    buttonType?: "button" | "link";
+    href?: string;
+    ariaLabel?: string;
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+    type = "toggle",
+    buttonType = "button",
+    href = "",
+    ariaLabel,
+    items = [],
+    class: className,
+    ...rest
+} = Astro.props;
+
+let switchClass = 'ui-switch-block';
+
+const classList = [
+    switchClass,
+    className,
+]
+
+function getButtonClasses(item) {
+    return [
+        `${switchClass}__button`,
+        item.isActive ? 'is-active' : '',
+        item.className ? item.className : ''
+    ]
+}
+---
+<div
+    class:list={classList}
+    data-switch
+    {...rest}
+>
+    <div class={`${switchClass}__inner`}>
+        <span class={`${switchClass}__background`} data-switch-background></span>
+        {
+           type === 'toggle' ?
+           <label class={`${switchClass}__label`} data-switch-label>
+                <input type="checkbox" class={`${switchClass}__checkbox`} data-switch-checkbox/>
+                <span class={`${switchClass}__checkbox-focused`}></span>
+                {items.map((item, index) => (
+                    <span class:list={getButtonClasses(item)} data-switch-item={index + 1}>
+                        {
+                            item.icon ? <Icon class={`${switchClass}__icon`} name={item.icon}></Icon> : ''
+                        }
+                        <span class={`${switchClass}__text`} set:html={item.text}></span>
+                    </span>
+                ))}
+            </label>
+            :
+            <div class={`${switchClass}__menu`} data-switch-menu>
+                {items.map((item, index) => (
+                    buttonType == 'link' ?
+                        <a href={href} class:list={getButtonClasses(item)} data-switch-button>
+                            {
+                                item.icon ? <Icon class={`${switchClass}__icon`} name={item.icon}></Icon> : ''
+                            }
+                            <span class={`${switchClass}__text`} set:html={item.text}></span>
+                        </a>
+                    :  <button type="button" class:list={getButtonClasses(item)} data-switch-button>
+                        {
+                            item.icon ? <Icon class={`${switchClass}__icon`} name={item.icon}></Icon> : ''
+                        }
+                        <span class={`${switchClass}__text`} set:html={item.text}></span>
+                    </button>
+                ))}
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,48 @@
+---
+import Icon from '@components/modules/Icon.astro';
+
+interface Props {
+    type?: 'checkbox' | 'radio' | 'toggler';
+    name?: string;
+    checked?: boolean;
+    value?: string;
+    isText?: boolean;
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+    type = 'checkbox',
+    name,
+    checked,
+    value,
+    isText = true,
+    class: className,
+    ...rest
+} = Astro.props;
+
+const checkboxClass = 'ui-checkbox';
+
+function getInput() {
+    return `<input class="${checkboxClass}__input" type="${type === 'radio' ? 'radio' : 'checkbox'}" ${value ? `value="${value}"` : ''} name="${name}" ${checked ? 'checked' : ''}>`;
+}
+---
+
+<label
+	class:list={[
+		checkboxClass,
+        type ? `${checkboxClass}_${type}` : '',
+		className,
+	]}
+	{...rest}
+>
+   <Fragment set:html={getInput()} />
+    <span class={`${checkboxClass}__checked`}>
+        {type === 'checkbox' ? <Icon class={`${checkboxClass}__checked-icon`} name="check"></Icon> : ''}
+        <span class={`${checkboxClass}__focused`}></span>
+    </span>
+
+    {
+        isText ? <span class={`${checkboxClass}__text`}><slot /></span> : ''
+    }
+</label>

@@ -1,0 +1,40 @@
+---
+
+interface Props {
+    name?: string;
+    placeholder?: string;
+    min?: number;
+    max?: number;
+    value?: number;
+    ariaLabel?: string;
+    class?: string;
+    classInput?: string;
+    [x: string]: any;
+}
+
+const {
+    name,
+    placeholder,
+    min = 1,
+    max = 10,
+    value = 1,
+    classInput,
+    ariaLabel,
+    class: className,
+    ...rest
+} = Astro.props;
+
+---
+<div class:list={[
+        'ui-counter',
+        className
+    ]}
+    data-counter
+    {...rest}
+>
+    <button class="ui-counter__button ui-counter__button_decrease" type="button" title="Уменьшить" aria-label="Уменьшить" data-counter-decrease><span></span></button>
+    <div class="counter__field">
+        <input type="number" name={name} value={value} min={min} max={max} class={`ui-counter__input ${classInput ? classInput : ''}`} data-counter-input data-value-min={min} data-value-max={max} aria-label={ariaLabel}></input>
+    </div>
+    <button class="ui-counter__button ui-counter__button_increase" type="button" title="Увеличить" aria-label="Увеличить" data-counter-increase><span></span></button>
+</div>

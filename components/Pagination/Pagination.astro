@@ -1,0 +1,40 @@
+---
+interface Props {
+    class?: string;
+    title?: string;
+    [x: string]: any;
+}
+
+const {
+	title,
+	list = [],
+	class: className,
+	...rest
+} = Astro.props;
+---
+
+<div
+	class:list={[
+		'pagination',
+		className,
+	]}
+	{...rest}
+>
+    <a href="" class="pagination__nav pagination__nav_prev">
+        <svg class="pagination__nav-icon" width="19" height="18" viewBox="0 0 19 18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5.2677 16.1833C5.04097 15.9811 5.04097 15.6527 5.2677 15.4505L12.5089 9.00711L5.2677 2.55108C5.04097 2.34893 5.04097 2.02044 5.2677 1.8183C5.49444 1.61615 5.86287 1.61615 6.08961 1.8183L13.7276 8.62809C13.841 8.72916 13.8977 8.8555 13.8977 8.99448C13.8977 9.12082 13.841 9.25979 13.7276 9.36087L6.0896 16.1707C5.86287 16.3854 5.49443 16.3854 5.2677 16.1833Z" />
+        </svg>
+    </a>
+    <div class="pagination__list">
+        <a href="" class="pagination__link is-active">1</a>
+        <a href="" class="pagination__link">2</a>
+        <a href="" class="pagination__link">3</a>
+        <a href="" class="pagination__link">...</a>
+        <a href="" class="pagination__link">4</a>
+    </div>
+    <a href="" class="pagination__nav pagination__nav_next">
+        <svg class="pagination__nav-icon" width="19" height="18" viewBox="0 0 19 18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5.2677 16.1833C5.04097 15.9811 5.04097 15.6527 5.2677 15.4505L12.5089 9.00711L5.2677 2.55108C5.04097 2.34893 5.04097 2.02044 5.2677 1.8183C5.49444 1.61615 5.86287 1.61615 6.08961 1.8183L13.7276 8.62809C13.841 8.72916 13.8977 8.8555 13.8977 8.99448C13.8977 9.12082 13.841 9.25979 13.7276 9.36087L6.0896 16.1707C5.86287 16.3854 5.49443 16.3854 5.2677 16.1833Z" />
+        </svg>
+    </a>
+</div>

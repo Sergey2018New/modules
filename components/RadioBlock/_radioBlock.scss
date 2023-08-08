@@ -1,0 +1,77 @@
+/* ------- UI - radio-block ------- */
+.ui-radio-block {
+    &__fieldset {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+
+    &__item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        user-select: none;
+        margin-right: 1rem;
+        margin-bottom: 1rem;
+        padding: 0 1.6rem;
+        height: 5rem;
+        cursor: pointer;
+
+        &:hover {
+            .ui-radio-block {
+                &__text {
+                    color: $base-color;
+                }
+            }
+        }
+    }
+
+    &__text {
+        font-size: var(--text-size);
+        line-height: 1.5;
+        color: $base-color;
+        transition: $duration color;
+    }
+
+    &__checked {
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 1px solid var(--color-border);
+        border-radius: 0.4rem;
+        outline: 2px solid transparent;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        transition: $duration border-color, $duration outline-color, $duration background;
+    }
+
+    &__input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+
+        &:checked {
+            ~ .ui-radio-block__checked {
+                border-color: $accent;
+            }
+
+            ~ .ui-radio-block__text {
+                color: $accent;
+            }
+
+            &:focus-visible {
+                ~ .ui-radio-block__checked {
+                    outline-color: $accent;
+                }
+            }
+        }
+    }
+}

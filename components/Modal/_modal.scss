@@ -37,12 +37,12 @@
 		display: block;
 		width: 2rem;
 		height: 2rem;
-		fill: $primary;
+		fill: $base-color;
 		transform: translateZ(0);
 		transition: $duration transform;
 		will-change: transform;
 	}
- 
+
 	&__wrap {
 		display: flex;
 		flex-flow: column nowrap;
@@ -60,13 +60,18 @@
 		position: relative;
 		flex-shrink: 0;
 		flex-grow: 0;
-		padding: 5rem 3rem;
+		padding: 5rem 4rem;
 		width: 60rem;
 		max-width: 100%;
 		background: $white;
 		transform: scale(0.8);
 		transition: $duration transform;
 		will-change: transform;
+
+        &:focus-visible,
+		&:focus {
+			outline: none;
+		}
 
 		@include media(mob) {
 			padding: 3rem;
@@ -96,4 +101,5 @@
 .is-modal-active {
 	overflow: hidden;
 	touch-action: none;
+    padding-right: var(--modal-scrollbar-compensate);
 }

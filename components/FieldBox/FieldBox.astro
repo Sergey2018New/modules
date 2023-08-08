@@ -1,0 +1,53 @@
+---
+import Input from '@components/modules/Input.astro';
+
+interface Props {
+    type?: "text" | "email" | "textarea" | "datepicker" | "phone";
+    id?: string;
+    name?: string;
+    label?: string;
+    placeholder?: string;
+    isRequired?: boolean;
+    rows?: number;
+    value?: number | string;
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+    type = "text",
+    id,
+    name,
+    label,
+    placeholder,
+    rows,
+    isRequired ,
+    value,
+    class: className,
+    ...rest
+} = Astro.props;
+
+const classInputs = () => {
+    return `field-box__input${type === 'textarea' ? ' field-box__textarea' : ''}`
+}
+---
+
+<div
+    class:list={[
+        'field-box',
+        type === 'textarea' ? 'field-box_textarea' : '',
+        className
+    ]}
+    data-field-box
+    {...rest}
+    >
+    <div class="field-box__content">
+        <label class="field-box__label" set:html={label}></label>
+        {
+            isRequired ?
+            <Input class={classInputs()} type={type} name={name} placeholder={placeholder} data-field-box-input  data-js-form-field></Input>
+            :
+            <Input class={classInputs()} type={type} name={name} placeholder={placeholder} data-field-box-input></Input>
+        }
+    </div>
+</div>

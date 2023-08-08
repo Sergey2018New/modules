@@ -41,71 +41,35 @@ const focusElements = [
 	'[tabindex]:not([tabindex^="-"])'
 ];
 
-modal.beforeOpen = (callbackCurrent) => {
-	callback(callbackCurrent);
-};
-modal.beforeClose = (callbackCurrent) => {
-	callback(callbackCurrent);
-};
-modal.afterOpen = (callbackCurrent) => {
-	callback(callbackCurrent);
-};
-modal.afterClose = (callbackCurrent) => {
-	callback(callbackCurrent);
+const bodyLock = () => {
+	const scrollbarCompensate = `${window.innerWidth - document.body.offsetWidth}px`;
+	html.style.setProperty('--modal-scrollbar-compensate', scrollbarCompensate);
+	body.classList.add('is-modal-active');
+
+	unlock = false;
+	setTimeout(() => {
+		unlock = true;
+	}, timeout);
 };
 
-modal.init = (beforeOpenCallback, beforeCloseCallback) => {
-	document.addEventListener('click', (e) => {
-		const target = e.target;
+const bodyUnlock = () => {
+	unlock = false;
 
-		if (target.closest('[data-modal-open]') || target.hasAttribute('data-modal-open')) {
-			modalSelectorOpen = target;
+	setTimeout(() => {
+		html.style.removeProperty('--modal-scrollbar-compensate');
+		body.classList.remove('is-modal-active');
 
-			const modalSelector = target.getAttribute('data-modal-open') || target.closest('[data-modal-open]').getAttribute('data-modal-open');
-			const currentModal = modalSelector ? document.querySelector(modalSelector) : '';
+		unlock = true;
+	}, timeout);
+};
 
-			e.preventDefault();
+const openModal = (currentModal, isDoubleModal = false) => {
+	if (currentModal && !isOpen && unlock || isDoubleModal) {
+		const modalWindow = currentModal.querySelector('[data-modal-window]');
 
-			openModal(currentModal);
+		if (!isDoubleModal) {
+			modal.beforeOpen();
 		}
-
-		if (isOpen && (target.closest('[data-modal-close]') || target.hasAttribute('data-modal-close') ||
-			!target.closest('[data-modal-window]') && !target.hasAttribute('data-modal-window'))
-		) {
-			const currentModal = target.hasAttribute("data-modal") ? target : target.closest('[data-modal]') || '';
-			console.log(currentModal);
-			e.preventDefault();
-
-			closeModal(currentModal);
-		}
-	});
-
-	document.addEventListener('keydown', (e) => {
-		const modalActive = document.querySelector('[data-modal].is-active');
-
-		if (e.which === 27 && isOpen) {
-			closeModal(modalActive);
-			return;
-		}
-
-		if (e.which == 9 && isOpen) {
-			focusCatcher(e, modalActive);
-			return;
-		}
-	});
-};
-
-modal.open = (selector, callbackCurrent) => {
-	const currentModal = selector && typeof selector == 'string' ? document.querySelector(selector) : '';
-
-	callback(callbackCurrent);
-	
-	openModal(currentModal);
-};
-
-function openModal(currentModal) {
-	if (!isOpen && unlock && currentModal) {
-		modal.beforeOpen();
 
 		currentModal.setAttribute('aria-hidden', false);
 		currentModal.classList.add('is-visible');
@@ -116,68 +80,57 @@ function openModal(currentModal) {
 
 		isOpen = true;
 
-		bodyLock();
+		if (!isDoubleModal) {
+			bodyLock();
 
-		setTimeout(() => {
-			modal.afterOpen();
-		}, timeout);
+			setTimeout(() => {
+				modal.afterOpen();
+
+				if (modalWindow) {
+					modalWindow.focus();
+				}
+
+			}, timeout);
+		}
 	}
-}
+};
 
-function closeModal(activeModal) {
+const closeModal = (activeModal, isDoubleModal = false) => {
 	if (isOpen && unlock && activeModal) {
 		modal.beforeClose();
 
 		activeModal.setAttribute('aria-hidden', true);
 		activeModal.classList.remove('is-active');
 
-		bodyUnlock();
-		
+		if (!isDoubleModal) {
+			bodyUnlock();
+		}
+
 		setTimeout(() => {
-			isOpen = false;
 			activeModal.scrollTop = 0;
 			activeModal.querySelector('[data-modal-window]').scrollTop = 0;
 			activeModal.classList.remove('is-visible');
 
-			if (modalSelectorOpen) {
-				modalSelectorOpen.focus();
-			}
+			if (!isDoubleModal) {
+				isOpen = false;
 
-			modal.afterClose();
+				if (modalSelectorOpen) {
+					modalSelectorOpen.focus();
+				}
+
+				modal.afterClose();
+			}
 		}, timeout);
 	}
-}
+};
 
-function bodyLock() {
-	const lockPaddingValue = window.innerWidth - body.offsetWidth + 'px';
-	console.log(lockPaddingValue);
-	html.style.setProperty('--lock-padding-right', lockPaddingValue);
-	body.classList.add('is-modal-active');
-
-	unlock = false;
-	setTimeout(() => {
-		unlock = true;
-	}, timeout);
-}
-
-function bodyUnlock() {
-	unlock = false;
-
-	setTimeout(() => {
-		html.style.removeProperty('--lock-padding-right');
-		body.classList.remove('is-modal-active');
-
-		unlock = true;
-	}, timeout);
-}
-
-function callback (callbackCurrent) {;
+const callback = (callbackCurrent) => {
 	if (callbackCurrent && typeof callbackCurrent === 'function') {
 		callbackCurrent();
 	}
-}
+};
 
-function focusCatcher(e, modal){
+const focusCatcher = (e, modal) => {
     // Находим все элементы на которые можно сфокусироваться
     const nodes = modal.querySelectorAll(focusElements);
 
@@ -203,6 +156,80 @@ function focusCatcher(e, modal){
             e.preventDefault();
         }
     }
-}
+};
+
+modal.beforeOpen = (callbackCurrent) => {
+	callback(callbackCurrent);
+};
+modal.beforeClose = (callbackCurrent) => {
+	callback(callbackCurrent);
+};
+modal.afterOpen = (callbackCurrent) => {
+	callback(callbackCurrent);
+};
+modal.afterClose = (callbackCurrent) => {
+	callback(callbackCurrent);
+};
+
+modal.init = () => {
+	document.addEventListener('click', (e) => {
+		const target = e.target;
+
+		if (target.closest('[data-modal-open]') || target.hasAttribute('data-modal-open')) {
+			const modalSelector = target.getAttribute('data-modal-open') || target.closest('[data-modal-open]').getAttribute('data-modal-open');
+			const currentModal = modalSelector ? document.querySelector(modalSelector) : '';
+
+			modalSelectorOpen = target.hasAttribute('data-modal-open') ? target :
+            target.closest('[data-modal-open]');
+
+			e.preventDefault();
+
+			openModal(currentModal);
+		}
+
+		if (isOpen && (target.closest('[data-modal-close]') || target.hasAttribute('data-modal-close') ||
+			!target.closest('[data-modal-window]') && !target.hasAttribute('data-modal-window'))
+		) {
+			const currentModal = target.hasAttribute('data-modal') ? target : target.closest('[data-modal]') || '';
+			e.preventDefault();
+
+			closeModal(currentModal);
+		}
+	});
+
+	document.addEventListener('keydown', (e) => {
+		const modalActive = document.querySelector('[data-modal].is-active');
+
+		if (e.code === 'Escape' || e.key === 'Escape' && isOpen) {
+			closeModal(modalActive);
+			return;
+		}
+
+		if (e.code === 'Tab' || e.key === 'Tab' && isOpen) {
+			focusCatcher(e, modalActive);
+			return;
+		}
+	});
+};
+
+modal.open = (selector, callbackCurrent) => {
+	const currentModal = selector && typeof selector === 'string' ? document.querySelector(selector) : '';
+
+    modalSelectorOpen = null;
+
+	callback(callbackCurrent);
+
+    if (isOpen) {
+        const activeModal = document.querySelector('[data-modal].is-active');
+
+        if (activeModal) {
+            closeModal(activeModal, true);
+        }
+
+        openModal(currentModal, true);
+    } else {
+        openModal(currentModal);
+    }
+};
 
 export {modal};

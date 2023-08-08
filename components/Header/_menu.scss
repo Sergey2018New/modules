@@ -1,0 +1,210 @@
+/* ------- Menu ------- */
+.menu {
+    &__list {
+        display: grid;
+        grid-auto-flow: column;
+        gap: 1rem;
+        justify-content: flex-start;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        @include media(tab) {
+            grid-auto-flow: row;
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    &__link {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 1.5rem;
+        height: 5rem;
+        text-decoration: none;
+        text-align: center;
+        color: $white;
+        background: $black;
+        transition-property: background, color, border-color;
+
+        @include media(tab) {
+            display: block;
+            height: auto;
+            text-align: left;
+            padding: 1rem 2rem;
+            color: $base-color;
+            background: none;
+        }
+
+        @include hover {
+            background: grey;
+        }
+    }
+
+    &__backdrop {
+        display: none;
+
+        @include media(tab) {
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: calc(var(--vh, 1vh) * 100);
+            display: block;
+            background: $backdrop;
+            opacity: 0;
+            transition: $duration opacity;
+            pointer-events: none;
+            will-change: opacity;
+
+            @include active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+    }
+
+    &__container {
+        @include media(tab) {
+            position: relative;
+            padding: 5rem 0;
+            overflow: hidden;
+            overflow-y: auto;
+            height: 100%;
+            pointer-events: auto;
+            background: $white;
+        }
+    }
+
+    &__popup {
+        @include media(tab) {
+            position: fixed;
+            z-index: 200;
+            top: 0;
+            left: 0;
+            height: calc(var(--vh, 1vh) * 100);
+            display: none;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            transform: translate(-100%, 0);
+            transition: $duration transform, $duration opacity;
+            opacity: 0;
+            will-change: transform, opacity;
+
+            @include active {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+
+            @include visible {
+                display: block;
+            }
+        }
+    }
+
+    &__burger {
+        $burger-width: 5rem;
+        $burger-height: 5rem;
+        $burger-line-width: 3rem;
+        $burger-line-height: 2px;
+        $burger-line-offset: 6px;
+
+        position: relative;
+        display: none;
+        width: $burger-width;
+        height: $burger-height;
+        background: $black;
+
+        span {
+            position: absolute;
+            top: 50%;
+            margin-left: calc($burger-line-width * (-0.5));
+            margin-top: calc($burger-line-height * (-0.5));
+            width: $burger-line-width;
+            height: $burger-line-height;
+            background: $white;
+            transition: $duration transform;
+            will-change: transform, opacity;
+
+            &:first-child {
+                transform: translateY(($burger-line-offset + $burger-line-height) * (-1));
+            }
+
+            &:last-child {
+                transform: translateY($burger-line-offset + $burger-line-height);
+            }
+
+            &:nth-child(2) {
+                transition-property: opacity;
+            }
+        }
+
+        @include active() {
+            span {
+                &:first-child {
+                    transform: rotate(45deg);
+                }
+
+                &:last-child {
+                    transform: rotate(-45deg);
+                }
+
+                &:nth-child(2) {
+                    opacity: 0;
+                }
+
+            }
+        }
+
+        @include media(tab) {
+            display: block;
+        }
+    }
+
+    &__close {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 5rem;
+        height: 5rem;
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            height: 2px;
+            width: 2.6rem;
+            margin-top: -1px;
+            margin-left: -1.3rem;
+            background: $base-color;
+            transform: rotate(45deg);
+            will-change: transform;
+        }
+
+        &::after {
+            transform: rotate(-45deg);
+        }
+
+        span {
+            display: none;
+        }
+
+        @include media(tab) {
+            display: block;
+        }
+    }
+}
+
+.is-menu-active {
+    @include media(tab) {
+        padding-right: var(--menu-scrollbar-compensate);
+        overflow: hidden;
+        touch-action: none;
+    }
+}

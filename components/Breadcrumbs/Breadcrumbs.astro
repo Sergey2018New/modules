@@ -1,0 +1,38 @@
+---
+interface Props {
+    class?: string;
+    title?: string;
+    [x: string]: any;
+}
+
+const {
+	title,
+	list = [],
+	class: className,
+	...rest
+} = Astro.props;
+---
+
+<div
+	class:list={[
+		'breadcrumbs',
+		className,
+	]}
+	{...rest}
+>
+    <div class="breadcrumbs__container container">
+        <nav class="breadcrumbs__inner" role="navigation" aria-label="breadcrumbs">
+            <ol class="breadcrumbs__list">
+                <li class="breadcrumbs__item">
+                    <a href="/" class="breadcrumbs__link"><span>Главная</span></a>
+                </li>
+                {list.map((item) => (
+                     <li class="breadcrumbs__item">
+                        <a href="" class="breadcrumbs__link"><span set:html={item}></span></a>
+                    </li>
+                ))}
+                <li class="breadcrumbs__item" aria-current="page"><span set:html={title}></span></li>
+            </ol>
+        </nav>
+    </div>
+</div>

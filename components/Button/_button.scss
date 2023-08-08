@@ -1,19 +1,4 @@
 /* ------- UI - button ------- */
-
-button {
-	appearance: none;
-	border: none;
-	border-radius: 0;
-	padding: 0;
-	box-shadow: none;
-	font-family: inherit;
-	font-size: inherit;
-	color: $primary;
-	background-color: transparent;
-	cursor: pointer;
-	user-select: none;
-}
-
 .ui-button {
 	display: flex;
 	align-items: center;
@@ -32,6 +17,8 @@ button {
 	color: $white;
 	background: $accent;
 	transition: $duration background, $duration color, $duration border-color, $duration box-shadow;
+	user-select: none;
+	cursor: pointer;
 
 	&_fill {
 		width: 100%;
@@ -47,8 +34,8 @@ button {
   	}
 
 	&:focus-visible {
-		outline-color: $primary;
-	} 
+		outline-color: $base-color;
+	}
 
 	@include disabled {
 		color: $white;

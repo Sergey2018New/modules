@@ -1,0 +1,37 @@
+---
+interface Props {
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+	list = [],
+	class: className,
+	...rest
+} = Astro.props;
+---
+<div
+    class:list={[
+        'tab-menu',
+        className,
+    ]}
+    data-navigation
+    {...rest}
+>
+    <div class="tab-menu__inner">
+        { list ?
+            <div class="tab-menu__list">
+                {list.map((item, index) => (
+                    <button type="button" class:list={
+                        [
+                            'tab-menu__item',
+                            index === 0 ? 'is-active' : '',
+                        ]
+                    } data-navigation-item data-goto={item.goto} data-offset="40" set:html={item.text}></button>
+                ))}
+            </div>
+            : ''
+        }
+    </div>
+</div>
+

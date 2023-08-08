@@ -1,0 +1,52 @@
+/* ------- Breadcrumbs -------- */
+.breadcrumbs {
+    padding: 3rem 0 2.5rem;
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        list-style: none;
+        margin: 0 -0.5rem 0 0;
+        padding: 0;
+        font-weight: 400;
+        color: rgba($black, 0.7);
+
+        @include media(tab-l) {
+			overflow: auto;
+			-ms-overflow-style: none;
+			scrollbar-width: none;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
+        }
+    }
+
+    &__item {
+        display: flex;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+
+        &::after {
+            content: "/";
+            margin-left: 0.5rem;
+            color: inherit;
+        }
+
+        &:last-child {
+            &::after {
+                display: none;
+            }
+        }
+    }
+
+    &__link {
+        text-decoration: none;
+        color: $accent;
+
+        &:hover {
+            color: $accent;
+        }
+    }
+}

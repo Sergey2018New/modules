@@ -1,0 +1,172 @@
+/* ------- Rating -------- */
+.rating {
+    margin: 0;
+    padding: 0;
+    border: none;
+
+    &__group {
+        position: relative;
+        display: flex;
+        width: 2.4rem * 5;
+        user-select: none;
+    }
+
+    &__icon {
+        position: relative;
+        display: block;
+        width: 2.4rem;
+        height: 2.4rem;
+        fill: transparent;
+        stroke: $accent;
+        transition: $duration fill, $duration stroke;
+    }
+
+    &__item {
+        position: relative;
+        width: 2.4rem;
+        height: 2.4rem;
+        border-radius: 50%;
+        transition: $duration transform;
+        appearance: none;
+
+        &:focus-visible {
+            outline: none;
+            transform: scale(1.2);
+        }
+
+        &[data-rating-item] {
+            cursor: pointer;
+        }
+    }
+
+    &[data-rating="1"] {
+        .rating__item {
+            &:nth-child(1) {
+                .rating__icon {
+                    fill: $accent;
+                }
+            }
+        }
+    }
+
+    &[data-rating="2"] {
+        .rating__item {
+            &:nth-child(-n+2) {
+                .rating__icon {
+                    fill: $accent;
+                }
+            }
+        }
+    }
+
+    &[data-rating="3"] {
+        .rating__item {
+            &:nth-child(-n+3) {
+                .rating__icon {
+                    fill: $accent;
+                }
+            }
+        }
+    }
+
+    &[data-rating="4"] {
+        .rating__item {
+            &:nth-child(-n+4) {
+                .rating__icon {
+                    fill: $accent;
+                }
+            }
+        }
+    }
+
+    &[data-rating="5"] {
+        .rating__item {
+            &:nth-child(-n+5) {
+                .rating__icon {
+                    fill: $accent;
+                }
+            }
+        }
+    }
+
+    &[data-rating] {
+        .rating__item {
+            &:nth-child(n) {
+                &:focus-visible {
+                    outline: none;
+                    transform: scale(1.2);
+
+                    .rating__icon {
+                        fill: $accent;
+                        stroke: $accent;
+                    }
+                }
+            }
+        }
+    }
+
+    &[data-rating-hover] {
+        .rating__item {
+            &:focus-visible {
+                transform: none;
+            }
+
+            &:nth-child(n) {
+                .rating__icon {
+                    fill: transparent;
+                    stroke: $accent;
+                }
+            }
+        }
+    }
+
+    &[data-rating-hover="1"] {
+        .rating__item {
+            &:nth-child(1) {
+                .rating__icon {
+                    fill: $accent;
+                }
+            }
+        }
+    }
+
+    &[data-rating-hover="2"] {
+        .rating__item {
+            &:nth-child(-n+2) {
+                .rating__icon {
+                    fill: $accent;
+                }
+            }
+        }
+    }
+
+    &[data-rating-hover="3"] {
+        .rating__item {
+            &:nth-child(-n+3) {
+                .rating__icon {
+                    fill: $accent;
+                }
+            }
+        }
+    }
+
+    &[data-rating-hover="4"] {
+        .rating__item {
+            &:nth-child(-n+4) {
+                .rating__icon {
+                    fill: $accent;
+                }
+            }
+        }
+    }
+
+    &[data-rating-hover="5"] {
+        .rating__item {
+            &:nth-child(-n+5) {
+                .rating__icon {
+                    fill: $accent;
+                }
+            }
+        }
+    }
+}

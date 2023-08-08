@@ -1,7 +1,7 @@
 ---
 interface Props {
     type?: "button" | "submit" | "link" | "span";
-    size?: "lg";
+    size?: "sm" | "lg";
     style?: "second";
     fill?: boolean;
     center?: boolean;
@@ -13,7 +13,7 @@ interface Props {
 
 const {
     type = "button",
-    size = "md",
+    size,
     style,
     fill = false,
     center = false,
@@ -42,15 +42,16 @@ const classList =[
     className,
 ]
 ---
-{type == 'link' ? 
+{type == 'link' ?
     <a
-        href={href} 
+        href={href}
         class:list={classList}
+        aria-label={ariaLabel}
         {...rest}
     >
         <slot />
     </a>
-:  type == 'span' ? 
+:  type == 'span' ?
     <span
         class:list={classList}
         {...rest}

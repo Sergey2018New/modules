@@ -1,0 +1,344 @@
+/* ------- Menu ------- */
+$breakpoint-adaptive: tab;
+
+.menu {
+    &__list {
+        display: grid;
+        grid-auto-flow: column;
+        gap: 1rem;
+        justify-content: flex-start;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        @include media($breakpoint-adaptive) {
+            grid-auto-flow: row;
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    &__link {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 1.5rem;
+        height: 5rem;
+        text-decoration: none;
+        text-align: center;
+        color: $white;
+        background: $black;
+        transition-property: background, color, border-color;
+
+        &:focus-visible {
+            outline: none;
+            background: grey;
+        }
+
+        @include media($breakpoint-adaptive) {
+            display: block;
+            height: auto;
+            text-align: left;
+            padding: 0.5rem 2rem;
+            color: $black;
+            background: transparent;
+        }
+
+        @include hover {
+            background: grey;
+        }
+    }
+
+    &__submenu-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    &__submenu {
+        position: absolute;
+        top: 100%;
+        width: 25rem;
+        box-shadow: 0 0 1rem rgba($black, 0.12);
+        background: $white;
+        opacity: 0;
+        visibility: hidden;
+        transition: $duration opacity, $duration visibility, $duration transform;
+        will-change: transform, opacity, visibility, max-height;
+
+        @include media($breakpoint-adaptive) {
+            position: relative;
+            top: 0;
+            width: 100%;
+            padding-left: 2rem;
+            overflow: hidden;
+            opacity: 0;
+            max-height: 0;
+            background: #fafafa;
+            box-shadow: none;
+            transition: 0.4s opacity, 0.4s visibility, 0.4s max-height;
+        }
+    }
+
+    &__submenu-link {
+        display: block;
+        padding: 1rem 1.5rem;
+        text-decoration: none;
+        transition-property: color, background;
+
+        @include media($breakpoint-adaptive) {
+            padding: 0.5rem 2rem;
+        }
+
+        &:hover,
+        &:focus-visible {
+            background: lightgrey;
+        }
+
+        &:focus-visible {
+            outline: none;
+        }
+    }
+
+    &__dropdown {
+        position: relative;
+
+        > .menu__link,
+        > .menu__submenu-link {
+            position: relative;
+            padding-right: 4rem;
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                right: 1rem;
+                width: 2rem;
+                height: 2rem;
+                margin-top: -1rem;
+                mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='%232C2C2D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+                mask-size: 100%;
+                mask-repeat: no-repeat;
+                background: $white;
+                transition: $duration transform;
+
+                @include media($breakpoint-adaptive) {
+                    background: $base-color;
+                }
+            }
+        }
+
+        &.is-visible {
+            @include media($breakpoint-adaptive) {
+                > .menu__submenu {
+                    visibility: visible;
+                    opacity: 1;
+
+                    @include active {
+                        overflow: visible;
+                    }
+                }
+
+                > .menu__link,
+                > .menu__submenu-link {
+                    &::after {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+        }
+
+        @include active {
+            > .menu__submenu {
+                @include media($breakpoint-adaptive) {
+                    max-height: none;
+                }
+            }
+
+            > .menu__submenu {
+                @include media-min($breakpoint-adaptive) {
+                    visibility: visible;
+                    opacity: 1;
+                    transform: translate(0, 0);
+                }
+            }
+
+            > .menu__link {
+                @include media-min($breakpoint-adaptive) {
+                    background: grey;
+                }
+            }
+
+            > .menu__link,
+            > .menu__submenu-link {
+                &::after {
+                    @include media-min($breakpoint-adaptive) {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+        }
+    }
+
+    &__backdrop {
+        display: none;
+
+        @include media($breakpoint-adaptive) {
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            display: block;
+            background: $backdrop;
+            opacity: 0;
+            transition: $duration opacity;
+            pointer-events: none;
+            will-change: opacity;
+
+            @include active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+    }
+
+    &__container {
+        @include media($breakpoint-adaptive) {
+            position: relative;
+            padding: 5rem 0;
+            overflow: hidden;
+            overflow-y: auto;
+            height: 100%;
+            background: $white;
+        }
+    }
+
+    &__popup {
+        @include media($breakpoint-adaptive) {
+            position: fixed;
+            z-index: 200;
+            top: 0;
+            left: 0;
+            display: none;
+            width: 100%;
+            height: calc(var(--vh, 1vh) * 100);
+            max-width: 100%;
+            overflow: hidden;
+            transform: translate(-100%, 0);
+            transition: $duration transform, $duration opacity;
+            opacity: 0;
+            will-change: transform, opacity;
+
+            @include active {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+
+            @include visible {
+                display: block;
+            }
+        }
+    }
+
+    &__burger {
+        $burger-width: 5rem;
+        $burger-height: 5rem;
+        $burger-line-width: 3.2rem;
+        $burger-line-height: 2px;
+        $burger-line-offset: 6px;
+
+        position: relative;
+        display: none;
+        width: $burger-width;
+        height: $burger-height;
+        background: $black;
+
+        span {
+            position: absolute;
+            top: 50%;
+            margin-left: calc($burger-line-width * (-0.5));
+            margin-top: calc($burger-line-height * (-0.5));
+            width: $burger-line-width;
+            height: $burger-line-height;
+            background: $white;
+            transition: $duration transform, $duration opacity;
+            will-change: transform, opacity;
+
+            &:first-child {
+                transform: translateY(($burger-line-offset + $burger-line-height) * (-1));
+            }
+
+            &:last-child {
+                transform: translateY($burger-line-offset + $burger-line-height);
+            }
+
+        }
+
+        @include active() {
+            span {
+                &:first-child {
+                    transform: rotate(45deg);
+                }
+
+                &:last-child {
+                    transform: rotate(-45deg);
+                }
+
+                &:nth-child(2) {
+                    opacity: 0;
+                }
+
+            }
+        }
+
+        @include media($breakpoint-adaptive) {
+            display: block;
+        }
+    }
+
+    &__close {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 3.6rem;
+        height: 3.6rem;
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            height: 2px;
+            width: 2.6rem;
+            margin-top: -1px;
+            margin-left: -1.3rem;
+            background: $base-color;
+            transform: rotate(45deg);
+            will-change: transform;
+        }
+
+        &::after {
+            transform: rotate(-45deg);
+        }
+
+        span {
+            display: none;
+        }
+
+        @include media($breakpoint-adaptive) {
+            display: block;
+        }
+    }
+}
+
+.is-menu-active {
+    @include media(tab) {
+        padding-right: var(--menu-scrollbar-compensate);
+        overflow: hidden;
+        touch-action: none;
+    }
+}

@@ -13,12 +13,11 @@
 		* data-accordion-content - drop-down content
 */
 
+/** 
+	* @param  {Element} accordionsContainer - HTML container element, default document
+	* @param  {number} duration - accordion opening time (also needs to be changed in CSS)
+*/
 export default function accordion(accordionsContainer, duration = 300) {
-	/* 
-		@param  {Element} accordionsContainer - HTML container element, default document
-		@param  {number} duration - accordion opening time (also needs to be changed in CSS)
-	*/
-
 	let accordions;
 
 	if (accordionsContainer) {
@@ -29,78 +28,90 @@ export default function accordion(accordionsContainer, duration = 300) {
 		accordions = document.querySelectorAll('[data-accordion]');
 	}
 
-	if (!accordions) return;
-
-	accordions.forEach(accordion => {
-		if (!accordion.hasAttribute('data-accordion-init')) {
-			accordionInit();
-		}
-
-		function accordionInit () {
-			const accordionButton = accordion.querySelector('[data-accordion-button]');
-			const accordionContent = accordion.querySelector('[data-accordion-content]');
+	if (accordions.length) {
+		const accordionInit = (accordionEl) => {
+			const accordionButton = accordionEl.querySelector('[data-accordion-button]');
+			const accordionContent = accordionEl.querySelector('[data-accordion-content]');
 			let isOpen = true;
-			
-			accordion.setAttribute('data-accordion-init', '');
+			const accordionItem = () => {
+				isOpen = false;
 
-			if (accordionButton && accordionContent) {
-				if (accordion.classList.contains('is-active')) {
+				if (accordionEl.hasAttribute('data-accordion-one')) {
+					const accordionActive = accordionEl.closest('[data-accordions]').querySelector('[data-accordion].is-active');
+
+					if (accordionActive && accordionActive !== accordionEl) {
+						const accordionActiveContent = accordionActive.querySelector('[data-accordion-content]');
+
+						accordionActive.classList.remove('is-active', 'is-visible');
+						accordionButton.setAttribute('aria-expanded', 'false');
+
+						if (accordionActiveContent.style.maxHeight) {
+							accordionActiveContent.style.maxHeight = null;
+						}
+					}
+				}
+
+				accordionEl.classList.toggle('is-active');
+
+				if (accordionEl.classList.contains('is-active')) {
+					accordionButton.setAttribute('aria-expanded', 'true');
+					setTimeout(() => {
+						accordionEl.classList.add('is-visible');
+					}, duration);
+				} else {
+					accordionButton.setAttribute('aria-expanded', 'false');
+					accordionEl.classList.remove('is-visible');
+				}
+
+				if (accordionContent.style.maxHeight) {
+					accordionContent.style.maxHeight = `${accordionContent.scrollHeight}px`;
+					accordionContent.style.maxHeight = null;
+				} else {
 					accordionContent.style.maxHeight = `${accordionContent.scrollHeight}px`;
 				}
 
+				setTimeout(() => {
+					isOpen = true;
+				}, duration);
+			}
+			
+			accordionEl.setAttribute('data-accordion-init', '');
+
+			if (accordionButton && accordionContent) {
+				if (accordionEl.classList.contains('is-active')) {
+					accordionContent.style.maxHeight = `${accordionContent.scrollHeight}px`;
+					accordionButton.setAttribute('aria-expanded', 'true');
+				}
+
 				accordionButton.addEventListener('click', (event) => {
-					let isVisible = accordion.hasAttribute('data-accordion-visible');
+					event.preventDefault();
+
+					let isVisible = accordionEl.hasAttribute('data-accordion-visible');
 
 					if (isOpen) {
 						if (isVisible) {
-							if (!accordion.classList.contains('is-active')) {
+							if (!accordionEl.classList.contains('is-active')) {
 								accordionItem ();
 							}
 						} else {
 							accordionItem ();
 						}
 					}
+				});
 
-					function accordionItem () {
-						isOpen = false;
-
-						if (accordion.hasAttribute('data-accordion-one')) {
-							const accordionActive = accordion.closest('[data-accordions]').querySelector('[data-accordion].is-active');
-		
-							if (accordionActive && accordionActive !== accordion) {
-								const accordionActiveContent = accordionActive.querySelector('[data-accordion-content]');
-
-								accordionActive.classList.remove('is-active', 'is-visible');
-
-								if (accordionActiveContent.style.maxHeight) {
-									accordionActiveContent.style.maxHeight = null;
-								}
-							}
-						}
-		
-						accordion.classList.toggle('is-active');
-
-						if (accordion.classList.contains('is-active')) {
-							setTimeout(() => {
-								accordion.classList.add('is-visible');
-							}, duration);
-						} else {
-							accordion.classList.remove('is-visible');
-						}
-		
-						if (accordionContent.style.maxHeight) {
-							accordionContent.style.maxHeight = `${accordionContent.scrollHeight}px`;
-							accordionContent.style.maxHeight = null;
-						} else {
-							accordionContent.style.maxHeight = `${accordionContent.scrollHeight}px`;
-						}
-
-						setTimeout(() => {
-							isOpen = true;
-						}, duration);
+				window.addEventListener('resize', () => {
+					if (accordionEl.classList.contains('is-active')) {
+						accordionContent.style.maxHeight = null;
+						accordionContent.style.maxHeight = `${accordionContent.scrollHeight}px`;
 					}
 				});
 			}
-		}
-	});
+		};
+		
+		accordions.forEach((accordionEl) => {
+			if (!accordionEl.hasAttribute('data-accordion-init')) {
+				accordionInit(accordionEl);
+			}
+		});
+	}
 }

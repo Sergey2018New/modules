@@ -1,0 +1,143 @@
+/* ------- Animation ------- */
+@keyframes pulse {
+	from {
+	  transform: scale3d(1, 1, 1);
+	}
+  
+	50% {
+	  transform: scale3d(1.08, 1.08, 1.08);
+	}
+  
+	to {
+	  transform: scale3d(1, 1, 1);
+	}
+}
+
+@keyframes tada {
+	from {
+	  transform: scale3d(1, 1, 1);
+	}
+  
+	10%,
+	20% {
+	  transform: scale3d(0.95, 0.95, 0.95) rotate3d(0, 0, 1, -2deg);
+	}
+  
+	30%,
+	50%,
+	70%,
+	90% {
+	  transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, 2deg);
+	}
+  
+	40%,
+	60%,
+	80% {
+	  transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, -2deg);
+	}
+  
+	to {
+	  transform: scale3d(1, 1, 1);
+	}
+}
+
+@keyframes swing {
+	20% {
+	  transform: rotate3d(0, 0, 1, 15deg);
+	}
+  
+	40% {
+	  transform: rotate3d(0, 0, 1, -10deg);
+	}
+  
+	60% {
+	  transform: rotate3d(0, 0, 1, 5deg);
+	}
+  
+	80% {
+	  transform: rotate3d(0, 0, 1, -5deg);
+	}
+  
+	to {
+	  transform: rotate3d(0, 0, 1, 0deg);
+	}
+}
+
+.anim {
+	opacity: 0;
+	transition: 1s opacity, 1s transform;
+	animation-duration: 1s;
+
+	&_visible {
+		opacity: 1;
+	}
+
+	&__item {
+		opacity: 0;
+		transition: inherit;
+	}
+
+	&_fadeInUp {
+		transform: translate3d(0,3rem,0);
+
+		&.is-anim {
+			transform: translate3d(0,0,0);
+		}
+	}
+
+	&_fadeInDown {
+		transform: translate3d(0,-3rem,0);
+
+		&.is-anim {
+			transform: translate3d(0,0,0);
+		}
+	}
+
+	&_fadeInLeft {
+		transform: translate3d(3rem,0,0);
+
+		&.is-anim {
+			transform: translate3d(0,0,0);
+		}
+	}
+
+	&_fadeInRight {
+		transform: translate3d(-3rem,0,0);
+
+		&.is-anim {
+			transform: translate3d(0,0,0);
+		}
+	}
+
+	&_zoomIn {
+		transform: scale(0.7);
+
+		&.is-anim {
+			transform: scale(1);
+		}
+	}
+
+	&_pulse {
+		&.is-anim {
+			animation-name: pulse;
+		}
+	}
+
+	&_tada {
+		&.is-anim {
+			animation-name: tada;
+		}
+	}
+
+	&.is-anim {
+		opacity: 1;
+
+		.anim__item {
+			opacity: 1;
+		}
+	}
+}
+
+
+
+

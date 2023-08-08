@@ -1,11 +1,35 @@
 /* ------- tabs -------- */
 @keyframes fadeEffect {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.tabs-menu {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: flex-start;
+    gap: 1rem;
+
+    &__item {
+        padding: 0 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 4rem;
+        text-align: center;
+        background: lightgrey;
+        transition: $duration color, $duration background;
+        cursor: pointer;
+
+        &.is-active {
+            color: $white;
+            background: $accent;
+        }
+    }
 }
 
 .tabs {
