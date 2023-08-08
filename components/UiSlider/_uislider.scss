@@ -41,10 +41,17 @@
     box-shadow: none;
     background: $accent;
     cursor: pointer;
+    transition: $duration transform;
 
     &::before,
     &::after {
         display: none;
+    }
+
+    &:focus-visible {
+        outline-color: $accent;
+        outline-offset: 3px;
+        transform: scale(1.15);
     }
 }
 

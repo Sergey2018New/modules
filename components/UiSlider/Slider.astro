@@ -1,5 +1,9 @@
 ---
 interface Props {
+    inputType?: 'text' | 'number' | 'hidden';
+    name?: string;
+    nameFrom?: string;
+    nameTo?: string;
     min?: number;
     max?: number;
     step?: number;
@@ -7,27 +11,47 @@ interface Props {
     valueMin?: number;
     valueMax?: number;
 	isRange?: boolean;
+	isVisibleValue?: boolean;
+	ariaLabel?: string;
+	ariaLabelFrom?: string;
+	ariaLabelTo?: string;
     class?: string;
     [x: string]: any;
 }
 
-const { 
-	min = 0,
+const {
+    inputType = 'number',
+    name,
+    nameFrom,
+    nameTo,
+	min = 1,
 	max = 100,
 	step = 1,
 	value = 1,
 	valueMin = 1,
 	valueMax = 100,
-	isRange = true,
+	isRange = false,
+	isVisibleValue = true,
+    ariaLabel,
+    ariaLabelFrom = 'От',
+    ariaLabelTo = 'До',
 	class: className,
 	...rest
 } = Astro.props;
 
+const getInputMin = () => {
+    return `<input type="${inputType}" name="${nameFrom}" class="slider__input ui-input" data-slider-input-min min="${min}" max="${max}" value="${valueMin}" aria-label="${ariaLabelFrom}"/>`;
+}
+
+const getInputMax = () => {
+    return `<input type="${inputType}" name="${nameTo}" class="slider__input ui-input" data-slider-input-max max="${max}" max="${max}" value="${valueMax}" aria-label="${ariaLabelTo}"/>`;
+}
+
 ---
 
-<div 
+<div
 	class:list={[
-		'slider', 
+		'slider',
 		className
 	]}
 	data-slider
@@ -35,29 +59,37 @@ const {
 	data-slider-max={max}
 	data-slider-step={step}
 	data-slider-range={isRange ? true : null}
-	{	
+	{
 		...rest
 	}
 >
 	{
-		isRange ? 
-		<div class="slider__row">
+		isRange ?
+
+        inputType === 'hidden' ?
+        <Fragment set:html={getInputMin()}></Fragment>
+        <Fragment set:html={getInputMax()}></Fragment>
+        :
+        <div class="slider__row">
 			<div class="slider__column">
 				<div class="slider__label">От</div>
 				<div class="slider__field">
-					<input type="number" class="slider__input ui-input" data-slider-input-min min={min} max={max} value={valueMin} />
+                    <Fragment set:html={getInputMin()}></Fragment>
 				</div>
 			</div>
 			<div class="slider__column">
 				<div class="slider__label">До</div>
 				<div class="slider__field">
-					<input type="number" class="slider__input ui-input" data-slider-input-max min={min} max={max} value={valueMax} />
+					<Fragment set:html={getInputMax()}></Fragment>
 				</div>
 			</div>
-		</div> : 
-		<input type="number" class="slider__input ui-input" data-slider-input min={min} max={max} value={value} />
-		<div class="slider__value" data-slider-value></div>
+		</div>
+
+        : <input type={inputType} name={name} class="slider__input ui-input" data-slider-input min={min} max={max} value={value} aria-label={ariaLabel}/>
 	}
 
+    {
+        isVisibleValue ? <div class="slider__value" data-slider-value></div> : ''
+    }
 	<div class="slider__ui ul-slider" data-slider-ui></div>
 </div>
