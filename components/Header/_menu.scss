@@ -1,4 +1,6 @@
 /* ------- Menu ------- */
+$breakpoint-adaptive: tab;
+
 .menu {
     &__list {
         display: grid;
@@ -9,7 +11,7 @@
         margin: 0;
         padding: 0;
 
-        @include media(tab) {
+        @include media($breakpoint-adaptive) {
             grid-auto-flow: row;
             grid-template-columns: minmax(0, 1fr);
         }
@@ -28,7 +30,7 @@
         background: $black;
         transition-property: background, color, border-color;
 
-        @include media(tab) {
+        @include media($breakpoint-adaptive) {
             display: block;
             height: auto;
             text-align: left;
@@ -45,7 +47,7 @@
     &__backdrop {
         display: none;
 
-        @include media(tab) {
+        @include media($breakpoint-adaptive) {
             position: fixed;
             z-index: 100;
             left: 0;
@@ -67,7 +69,7 @@
     }
 
     &__container {
-        @include media(tab) {
+        @include media($breakpoint-adaptive) {
             position: relative;
             padding: 5rem 0;
             overflow: hidden;
@@ -79,7 +81,7 @@
     }
 
     &__popup {
-        @include media(tab) {
+        @include media($breakpoint-adaptive) {
             position: fixed;
             z-index: 200;
             top: 0;
@@ -159,7 +161,7 @@
             }
         }
 
-        @include media(tab) {
+        @include media($breakpoint-adaptive) {
             display: block;
         }
     }
@@ -195,14 +197,14 @@
             display: none;
         }
 
-        @include media(tab) {
+        @include media($breakpoint-adaptive) {
             display: block;
         }
     }
 }
 
 .is-menu-active {
-    @include media(tab) {
+    @include media($breakpoint-adaptive) {
         padding-right: var(--menu-scrollbar-compensate);
         overflow: hidden;
         touch-action: none;

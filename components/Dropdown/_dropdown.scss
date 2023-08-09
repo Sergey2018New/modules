@@ -11,6 +11,8 @@
 		border-radius: 1rem;
 		max-width: 100%;
 		text-align: left;
+        cursor: pointer;
+        user-select: none;
 	}
 
 	&__button-text {
@@ -26,16 +28,22 @@
 		top: 50%;
 		right: 0;
 		margin-top: -0.8rem;
-
-		@include media(mob-m) {
-			margin-top: -1rem;
-		}
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 1.6rem;
+		height: 1.6rem;
 	}
 
 	&__button-icon {
 		width: 1.6rem;
 		height: 1.6rem;
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='%232C2C2D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        mask-repeat: no-repeat;
+        mask-size: 100%;
+        background: currentColor;
 		will-change: transform;
+        transition: $duration transform;
 	}
 
 	&__popup {
@@ -43,9 +51,9 @@
 		z-index: 50;
 		margin-top: 0.5rem;
 		padding: 1rem 0;
-		border-radius: 1rem;
-		box-shadow: 0.3rem 0.3rem 1rem rgba($black, 0.1);
+		box-shadow: 0 0 1rem rgba($black, 0.1);
 		width: 24rem;
+        max-width: 100vw;
 		background: $white;
 		opacity: 0;
 		visibility: hidden;
@@ -53,9 +61,18 @@
 		transition: $duration visibility, $duration opacity;
 	}
 
+    &__list {
+        &:focus-visible,
+        &:focus {
+            outline: none;
+        }
+    }
+
 	&__scroll {
+        position: relative;
 		overflow: auto;
 		max-height: 4rem * 6;
+        cursor: pointer;
 
 		.simplebar-scrollbar {
 			&::before {
@@ -86,6 +103,10 @@
         }
 	}
 
+    &__menu {
+        // position: relative;
+    }
+
 	&__input {
 		position: absolute;
 		top: 0;
@@ -98,7 +119,8 @@
 		pointer-events: none;
 	}
 
-	&__menu-item {
+	&__menu-link,
+    &__list-option {
 		display: block;
 		padding: 1rem 2rem;
 		width: 100%;
@@ -110,19 +132,24 @@
 		cursor: pointer;
 		user-select: none;
 
-		&:hover {
-			color: $accent;
-		}
-
-		&:focus-visible {
-			outline: none;
+        &.is-selected {
 			background: rgba($black, 0.1);
 		}
 
-		&.is-selected {
-			display: none;
+		&.is-focused,
+        &:focus-visible {
+            outline: none;
+            color: $white;
+			background: $accent;
 		}
 	}
+
+    &__menu-link {
+        @include hover {
+            color: $white;
+			background: $accent;
+        }
+    }
 
 	@include active {
 		.ui-dropdown {
