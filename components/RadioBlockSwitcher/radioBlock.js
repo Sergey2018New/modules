@@ -18,7 +18,7 @@ export default function radioBlock() {
 				radioBackground.style.transform = `translate3d(${left}, 0 , 0)`;
 				radioBackground.style.width = width;
 			}
-		}
+		};
 
         offsetRadioBackground();
 

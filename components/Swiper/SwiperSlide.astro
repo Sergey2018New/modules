@@ -4,18 +4,18 @@ interface Props {
     [x: string]: any;
 }
 
-const { 
+const {
 	class: className,
 	...rest
 } = Astro.props;
 
 ---
-<div 
+<div
 	class:list={[
-		'swiper-slide', 
+		'swiper-slide',
 		className
 	]}
 	{...rest}
 >
-	<slot /> 
+	<slot />
 </div>

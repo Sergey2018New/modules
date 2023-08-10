@@ -43,6 +43,11 @@ export default function tabs(tabsContainer) {
 	}
 
     if (tabsElements.length) {
+        /**
+            * Change back overlay
+            * @param  {Element} tabsCurrent - HTML element of tabs
+            * @param  {Element} tabsOverlay - HTML overlay element
+        */
         const changeOverlay = (tabsCurrent, tabsOverlay) => {
             setTimeout(() => {
                 const tabActive = tabsCurrent.querySelector('[data-tabs-item].is-active');
@@ -51,9 +56,15 @@ export default function tabs(tabsContainer) {
                     tabsOverlay.style.width = `${tabActive.offsetWidth}px`;
                     tabsOverlay.style.left = `${tabActive.offsetLeft}px`;
                 }
-            },10);
-        }
+            }, 10);
+        };
 
+        /**
+            * Change tab
+            * @param  {Element} tabs - HTML element of tabs
+            * @param  {Element} tabCurrent - Tab panel HTML element
+            * @param  {Element} tabsButton - Tab dropdown button HTML element
+        */
         const moveTab = (tabs, tabCurrent, tabsButton) => {
             if (!tabs || !tabCurrent) return;
 
@@ -84,8 +95,11 @@ export default function tabs(tabsContainer) {
                     tabsButtonText.textContent = tabCurrent.getAttribute('data-value') || '';
                 }
             }
-        }
+        };
 
+        /**
+            * Close drop down menu of tabs
+        */
         const closeTabsList =  () => {
             const tabsButtonActive = document.querySelector('[data-tabs-button].is-active');
             const tabsListActive = document.querySelector('[data-tabs-list].is-active');
@@ -96,8 +110,14 @@ export default function tabs(tabsContainer) {
             if (tabsListActive) {
                 tabsListActive.classList.remove('is-active');
             }
-        }
+        };
 
+        /**
+            * Tab navigation
+            * @param  {Element} tabs - HTML element of tabs
+            * @param  {Element} tabsOverlay - menu item background HTML element
+            * @param  {Element} direction - Tab navigation direction
+        */
         const tabNavigation = (tabs, tabsOverlay, direction) => {
             if (!tabs) return;
 
@@ -119,8 +139,14 @@ export default function tabs(tabsContainer) {
                     }
                 }
             }
-        }
+        };
 
+        /**
+            * Checking and changing the disabled attribute of the tab navigation button
+            * @param  {Element} tabs - HTML element of tabs
+            * @param  {Element} tabNavPrev - Button to move tabs to the left
+            * @param  {Element} tabNavNext - Button to move tabs to the right
+        */
         const isDisabledTabNavigation = (tabs, tabNavPrev, tabNavNext) => {
             let tabActive = tabs.querySelector('[data-tabs-item].is-active');
 
@@ -139,7 +165,7 @@ export default function tabs(tabsContainer) {
                     tabNavNext.classList.add('is-disabled');
                 }
             }
-        }
+        };
 
         tabsElements.forEach((tabs) => {
             const tabsInit = () => {
@@ -201,7 +227,7 @@ export default function tabs(tabsContainer) {
                         }
                     });
                 }
-            }
+            };
 
             if (!tabs.hasAttribute('data-tabs-init')) {
                 tabsInit();

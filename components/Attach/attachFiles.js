@@ -69,11 +69,11 @@ export default function attach(containerEl) {
             const { files } = input;
 
             for (let i = 0; i < files.length; i += 1) {
-            const file = files[i];
+                const file = files[i];
 
-            if (file.lastModified !== parseInt(removeId, 10) && file.name !== fileName) {
-                dt.items.add(file);
-            }
+                if (file.lastModified !== parseInt(removeId, 10) && file.name !== fileName) {
+                    dt.items.add(file);
+                }
             }
 
             input.files = dt.files;

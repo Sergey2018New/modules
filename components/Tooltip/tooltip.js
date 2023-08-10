@@ -19,10 +19,10 @@ export default function tooltip(tooltipContainer) {
 	if (tooltips.length) {
 		const tooltipInit = (tooltip) => {
 			tooltip.setAttribute('data-tooltip-init', '');
-	
+
 			let tooltipContent = tooltip.getAttribute('title') || tooltip.getAttribute('data-tooltip-content') || '';
 			let tooltipTrigger = tooltip.getAttribute('data-tooltip-trigger') || 'focus';
-	
+
 			if (tooltipContent) {
 				tippy(tooltip, {
 					content: tooltip.getAttribute('title') || tooltip.getAttribute('data-tooltip-content') || '',
@@ -34,11 +34,11 @@ export default function tooltip(tooltipContainer) {
 					offset: 0,
 				});
 			}
-		}
-	
-		for (let i = 0; i < tooltips.length; i++) {
+		};
+
+		for (let i = 0; i < tooltips.length; i += 1) {
 			const tooltip = tooltips[i];
-			
+
 			if (!tooltip.hasAttribute('data-tooltip-init')) {
 				tooltipInit(tooltip);
 			}
