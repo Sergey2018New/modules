@@ -185,7 +185,6 @@ export default function dropdown(dropdownContainer, duration = 300) {
                     if (getActiveDropdown() && getActiveDropdown() !== dropdownEl) {
                         getActiveDropdown().classList.remove('is-active');
                         dropdownEl.classList.add('is-active');
-                        dropdownButton.setAttribute('aria-expanded', true);
                     } else {
                         dropdownEl.classList.toggle('is-active');
                     }
@@ -207,10 +206,15 @@ export default function dropdown(dropdownContainer, duration = 300) {
                             setScrollTop();
                         }
 
-                        dropdownButton.setAttribute('aria-expanded', true);
+                        if (dropdownButton) {
+                            dropdownButton.setAttribute('aria-expanded', true);
+                        }
                     } else {
                         dropdownPopup.setAttribute('aria-hidden', true);
-                        dropdownButton.setAttribute('aria-expanded', false);
+
+                        if (dropdownButton) {
+                            dropdownButton.setAttribute('aria-expanded', false);
+                        }
                     }
 
                     if (dropdownInput && dropdownType === 'select') {
@@ -258,6 +262,10 @@ export default function dropdown(dropdownContainer, duration = 300) {
 
                     if (dropdownButtonText) {
                         dropdownButtonText.textContent = valueText ? valueText : value ? value : '';
+                    }
+
+                    if (dropdownButton) {
+                        dropdownButton.setAttribute('aria-expanded', false);
                     }
 
                     if (dropdownInput) {

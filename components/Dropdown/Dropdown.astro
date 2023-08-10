@@ -131,10 +131,10 @@ const classList =[
     }
     {type === 'select' ?
         <div class={`${dropdownClass}__popup`} data-dropdown-popup aria-hidden="true">
-            <div class={`${dropdownClass}__scroll`} data-dropdown-scroll role="none">
+            <div class={`${dropdownClass}__scroll`} data-dropdown-scroll>
                 <div class={`${dropdownClass}__list`} data-dropdown-list tabindex="0" role="listbox">
                     {listItems ? listItems.map((item, index) => (
-                        <div id={`active-${index + 1}`} class={`${dropdownClass}__list-option ${isSelected && index === 0 ? 'is-selected' : ''}`} data-dropdown-option data-value={item.value !== undefined ? item.value : item} role="option" aria-selected={item.selected ? 'true' : 'false'}>
+                        <div class={`${dropdownClass}__list-option ${isSelected && index === 0 ? 'is-selected' : ''}`} data-dropdown-option data-value={item.value !== undefined ? item.value : item} role="option" aria-selected={item.selected ? 'true' : 'false'}>
                             <Fragment set:html={item.text !== undefined ? item.text : item} />
                         </div>
                     )) : ''}
