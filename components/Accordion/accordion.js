@@ -53,21 +53,24 @@ export default function accordion(accordionsContainer, duration = 300) {
 
 				accordionEl.classList.toggle('is-active');
 
+				accordionContent.style.maxHeight = `${accordionContent.scrollHeight}px`;
+
 				if (accordionEl.classList.contains('is-active')) {
 					accordionButton.setAttribute('aria-expanded', 'true');
 					setTimeout(() => {
 						accordionEl.classList.add('is-visible');
 					}, duration);
+
+					setTimeout(() => {
+						accordionContent.style.maxHeight = null;
+					}, duration);
 				} else {
 					accordionButton.setAttribute('aria-expanded', 'false');
 					accordionEl.classList.remove('is-visible');
-				}
 
-				if (accordionContent.style.maxHeight) {
-					accordionContent.style.maxHeight = `${accordionContent.scrollHeight}px`;
-					accordionContent.style.maxHeight = null;
-				} else {
-					accordionContent.style.maxHeight = `${accordionContent.scrollHeight}px`;
+					setTimeout(() => {
+						accordionContent.style.maxHeight = null;
+					}, 1);
 				}
 
 				setTimeout(() => {
