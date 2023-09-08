@@ -190,11 +190,10 @@ modal.init = () => {
 			if (isOpen) {
 				const activeModal = document.querySelector('[data-modal].is-active');
 		
-				if (activeModal) {
+				if (activeModal !== currentModal) {
 					closeModal(activeModal, true);
+					openModal(currentModal, true);
 				}
-		
-				openModal(currentModal, true);
 			} else {
 				modalSelectorOpen = target.hasAttribute('data-modal-open') ? target :
 				target.closest('[data-modal-open]');
@@ -226,7 +225,7 @@ modal.init = () => {
 	});
 };
 
-modal.open = (selector, callbackCurrent) => {
+document.documentElement.modalOpen = modal.open = (selector, callbackCurrent) => {
 	const currentModal = selector && typeof selector === 'string' ? document.querySelector(selector) : '';
 
     modalSelectorOpen = null;
@@ -238,9 +237,12 @@ modal.open = (selector, callbackCurrent) => {
 
         if (activeModal) {
             closeModal(activeModal, true);
-        }
 
-        openModal(currentModal, true);
+			if (activeModal !== currentModal) {
+				closeModal(activeModal, true);
+				openModal(currentModal, true);
+			}
+        }
     } else {
         openModal(currentModal);
     }

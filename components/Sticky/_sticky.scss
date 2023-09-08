@@ -1,0 +1,28 @@
+/* ------- sticky -------- */
+.sticky {
+    height: 100%;
+
+    &__container {
+        position: relative;
+        height: 100%;
+    }
+
+    &__block {
+        &.is-fixed {
+            @include media-min(tab) {
+                position: fixed;
+                top: calc(var(--header-height-fixed) + 3rem);
+            }
+        }
+
+        &.is-bottom {
+            @include media-min(tab) {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                top: auto;
+                width: 100%;
+            }
+        }
+    }
+}
