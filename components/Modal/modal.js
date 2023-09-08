@@ -92,6 +92,13 @@ const openModal = (currentModal, isDoubleModal = false) => {
 
 			}, timeout);
 		}
+
+		setTimeout(() => {
+			if (modalWindow) {
+				modalWindow.focus();
+			}
+
+		}, timeout);
 	}
 };
 
@@ -178,16 +185,23 @@ modal.init = () => {
 		if (target.closest('[data-modal-open]') || target.hasAttribute('data-modal-open')) {
 			const modalSelector = target.getAttribute('data-modal-open') || target.closest('[data-modal-open]').getAttribute('data-modal-open');
 			const currentModal = modalSelector ? document.querySelector(modalSelector) : '';
-
-			modalSelectorOpen = target.hasAttribute('data-modal-open') ? target :
-            target.closest('[data-modal-open]');
-
 			e.preventDefault();
 
-			openModal(currentModal);
-		}
+			if (isOpen) {
+				const activeModal = document.querySelector('[data-modal].is-active');
+		
+				if (activeModal) {
+					closeModal(activeModal, true);
+				}
+		
+				openModal(currentModal, true);
+			} else {
+				modalSelectorOpen = target.hasAttribute('data-modal-open') ? target :
+				target.closest('[data-modal-open]');
 
-		if (isOpen && (target.closest('[data-modal-close]') || target.hasAttribute('data-modal-close') ||
+				openModal(currentModal);
+			}
+		} else if (isOpen && (target.closest('[data-modal-close]') || target.hasAttribute('data-modal-close') ||
 			!target.closest('[data-modal-window]') && !target.hasAttribute('data-modal-window'))
 		) {
 			const currentModal = target.hasAttribute('data-modal') ? target : target.closest('[data-modal]') || '';
