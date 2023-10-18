@@ -6,7 +6,7 @@
 	z-index: 200;
 	display: none;
 	width: 100%;
-	height: calc(var(--vh, 1%) * 100);
+	height: calc(var(--vh, 1vh) * 100);
 	overflow: hidden;
     overflow-y: auto;
 	opacity: 0;
@@ -24,12 +24,11 @@
 		width: 4rem;
 		height: 4rem;
 		background: transparent;
+        transition: $duration color, $duration background;
 
 		&:hover,
 		&:active {
-			.modal__close-icon {
-				transform: translateZ(0) rotate(90deg);
-			}
+			color: $accent;
 		}
 	}
 
@@ -37,10 +36,7 @@
 		display: block;
 		width: 2rem;
 		height: 2rem;
-		fill: $base-color;
-		transform: translateZ(0);
-		transition: $duration transform;
-		will-change: transform;
+		fill: currentColor;
 	}
 
 	&__wrap {
@@ -64,9 +60,6 @@
 		width: 60rem;
 		max-width: 100%;
 		background: $white;
-		transform: scale(0.8);
-		transition: $duration transform;
-		will-change: transform;
 
         &:focus-visible,
 		&:focus {
@@ -91,10 +84,6 @@
 	&.is-active {
 		opacity: 1;
 		transition: $duration;
-
-		.modal__window {
-			transform: scale(1);
-		}
 	}
 }
 

@@ -1,8 +1,6 @@
 ---
 interface Props {
-    type?: "mobile";
-    id?: string;
-    heading?: string;
+    id?: number | string;
     title?: string;
     titleClass?: string;
     closeClass?: string;
@@ -13,14 +11,12 @@ interface Props {
 }
 
 const {
-	type,
 	id,
-	heading,
 	title,
 	titleClass,
 	closeClass,
     ariaLabel = title ? title : '',
-    closeAriaLabel = 'Закрыть диалоговое окно',
+    closeAriaLabel = 'Закрыть',
     class: className,
     ...rest
 } = Astro.props;
@@ -28,7 +24,6 @@ const {
 ---
 <div class:list={[
 		'modal',
-		{'modal-mobile': type === 'mobile'},
 		className
 	]}
 	id={id}
@@ -38,11 +33,7 @@ const {
 	{...rest}
 >
 	<div class="modal__wrap">
-		<div class="modal__window" role="dialog" aria-modal="true" aria-label={ariaLabel} data-modal-window tabindex="0">
-			{heading ?
-			<div class="modal__heading">
-				<div class="modal__heading-title" set:html={heading}></div>
-			</div> : ''}
+		<div class="modal__window" role="dialog" aria-modal="true" aria-label={ariaLabel} data-modal-window>
 			<div class="modal__content">
 				{title ? <div class:list={['modal__title', titleClass]} set:html={title}></div> : ''}
 				<slot/>

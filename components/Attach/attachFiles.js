@@ -13,7 +13,7 @@
   * Attach Files
   * @param  {Element} containerEl - HTML container element, document by default
 */
-export default function attach(containerEl) {
+export default function initAttach(containerEl) {
     let attaches;
 
     if (containerEl) {
@@ -25,35 +25,95 @@ export default function attach(containerEl) {
     }
 
     if (attaches.length) {
-        const attachMaxSize = 10 * 1024 * 1024;
-        const fileExtension = ['doc', 'docx', 'pdf', 'jpg', 'jpeg'];
-        const errorMessages = {
-            ext: 'Файл не загружен. Допустимые типы файлов: DOC, DOCX, PDF, JPG',
-            size: 'Файл не загружен. Максимальный размер файла — 10 Мб',
+        const MAX_SIZE = 10; // size in megabytes
+        const MAX_FILES = 10; // maximum number of uploaded files
+        const ERROR_MESSAGES = {
+            extension: 'Acceptable file types: DOC, DOCX, JPG, XLS, XLSX, PNG, JPG, GIF',
+            maxSize: 'Maximum file size: 10 MB',
         };
+        const EXTENSIONS = ['doc', 'docx', 'xls', 'xlsx', 'png', 'jpg', 'jpeg', 'gif'];
 
         /**
             * Output of attached file
+            * @param  {Element} attachItem - HTML element attach
             * @param  {Element} attachFiles - HTML wrapper element for file output
             * @param  {File} file - file from input field
             * @param  {String} errorMsg - Error message
         */
-        const renderFile = (attachFiles, file, errorMsg) => {
+        const renderFile = (attachType, attachItem, attachFiles, file, errorMsg) => {
             const attachFilesCurrent = attachFiles;
+            const fileErrorEl = attachItem.querySelector('[data-attach-message-error]');
+            let fileItemHtml = '';
+            let fileErrorMessage = errorMsg ? `<div class="ui-attach__message-error" data-attach-message-error>${errorMsg}</div>` : '';
+            const isExtPictures = /\.(jpe?g|png|gif)$/i.test(file.name);
 
-            if (attachFilesCurrent) {
-            attachFilesCurrent.insertAdjacentHTML('beforeend', `<div class="ui-attach__file" data-attach-file data-id="${file.lastModified}" data-name="${file.name}">
-                <div class="ui-attach__file-box">
-                <svg class="ui-attach__file-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8.38668 0V5.59371H2.79297V21.6C2.79297 22.9255 3.86749 24 5.19297 24H18.8069C20.1323 24 21.2069 22.9255 21.2069 21.6V2.4C21.2069 1.07452 20.1323 0 18.8069 0H8.38668ZM15.3287 15.0773C15.3401 16.8548 13.1323 17.7689 11.8872 16.5026C11.5065 16.1218 11.2967 15.6155 11.2968 15.077L11.2972 11.3255L12.7034 11.3257L12.703 15.0772C12.7337 15.8853 13.8905 15.8857 13.9224 15.0773V10.7162C13.8231 8.10706 10.0829 8.10908 9.98447 10.7162V16.0619C9.98447 17.1476 10.8677 18.0308 11.9534 18.0308H13.3127V19.4371H11.9534C10.0923 19.4371 8.57821 17.923 8.57821 16.0619V10.7162C8.74842 6.24359 15.16 6.24701 15.3287 10.7162V15.0773Z" fill="#2A2623"></path>
-                    <path d="M6.98063 0.412109L3.20508 4.18766H6.98063V0.412109Z" fill="#2A2623"></path>
-                </svg>
-                <div class="ui-attach__file-name">${file.name}</div>
-                <button type="button" class="ui-attach__file-remove" title="Удалить" aria-label="Удалить"
-                data-attach-remove></button>
-                </div>
-                ${errorMsg ? `<div class="ui-attach__file-error">${errorMsg}</div>` : ''}
-                </div>`);
+            if (fileErrorEl) {
+                fileErrorEl.remove();
+            }
+
+            if (fileErrorMessage) {
+                attachItem.insertAdjacentHTML('beforeend', fileErrorMessage);
+            } else if (attachFilesCurrent) {
+                if (attachType === 'pictures') {
+                    if (isExtPictures) {
+                        const reader = new FileReader();
+                        const maxWidth = 64;
+
+                        reader.onload = function (r) {
+                            const tempImg = new Image();
+                            tempImg.src = reader.result;
+
+                            tempImg.onload = function() {
+                                const tempScale = tempImg.width / tempImg.height;
+                                let tempW = tempImg.width;
+                                let tempH = tempImg.height;
+
+                                if (tempScale > 1) {
+                                    tempW = maxWidth * tempScale;
+                                    tempH = maxWidth;
+                                } else if (tempScale < 1) {
+                                    tempW = maxWidth;
+                                    tempH = maxWidth / tempScale;
+                                }
+
+                                tempW = Math.round(tempW);
+                                tempH = Math.round(tempH);
+
+                                const canvas = document.createElement('canvas');
+                                canvas.width = tempW;
+                                canvas.height = tempH;
+
+                                const ctx = canvas.getContext("2d");
+                                ctx.drawImage(this, 0, 0, tempW, tempH);
+
+                                const dataURL = canvas.toDataURL();
+
+                                fileItemHtml = `<div class="ui-attach__file" data-attach-file data-id="${file.lastModified}" data-name="${file.name}">
+                                    <div class="ui-attach__file-box">
+                                        <img class="ui-attach__file-image" src="${dataURL}" width="64" height="64" alt=""/>
+                                        <button type="button" class="ui-attach__file-remove" title="Удалить" aria-label="Удалить"
+                                        data-attach-remove></button>
+                                    </div>
+                                </div>`;
+
+                                attachFilesCurrent.insertAdjacentHTML('beforeend', fileItemHtml);
+                            }
+                        };
+
+                        reader.readAsDataURL(file);
+                    }
+                } else {
+                    fileItemHtml = `<div class="ui-attach__file" data-attach-file data-id="${file.lastModified}" data-name="${file.name}">
+                    <div class="ui-attach__file-box">
+                    <span class="ui-attach__file-icon"></span>
+                    <div class="ui-attach__file-name">${file.name}</div>
+                    <button type="button" class="ui-attach__file-remove" title="Удалить" aria-label="Удалить"
+                    data-attach-remove></button>
+                    </div>
+                    </div>`;
+
+                    attachFilesCurrent.insertAdjacentHTML('beforeend', fileItemHtml);
+                }
             }
         };
 
@@ -95,48 +155,120 @@ export default function attach(containerEl) {
             return dt;
         };
 
+        /**
+            *
+        */
+        const isAdvancedUpload = function() {
+            const span = document.createElement('span');
+            return (('draggable' in span) || ('ondragstart' in span && 'ondrop' in span)) && 'FormData' in window && 'FileReader' in window;
+        }();
+
         attaches.forEach((attachItem) => {
+            const attachType = attachItem.getAttribute('data-type');
             const attachInput = attachItem.querySelector('[data-attach-input]');
-            const attachFiles = attachItem.querySelector('[data-attach-files]');
+            const attachFiles = attachType === 'pictures' ? attachItem : attachItem.querySelector('[data-attach-files]');
             let uploadedFiles = new DataTransfer();
 
-            attachItem.addEventListener('change', (event) => {
-                const { target } = event;
+            if (attachInput) {
+                const attachMessageExtension = attachInput.getAttribute('data-message-extension') || ERROR_MESSAGES.extension;
+                const attachMessageMaxSize = attachInput.getAttribute('data-message-max-size') || ERROR_MESSAGES.maxSize;
+                const attachMaxFiles = attachInput.getAttribute('data-max-files') || MAX_FILES;
+                let attachMaxSize = attachInput.getAttribute('data-max-size') || MAX_SIZE;
+                let attachExtensions = attachInput.getAttribute('accept');
 
-                if (target.hasAttribute('data-attach-input')) {
-                    const filesNew = target.files;
+                const isCheckMaxFiles = () => {
+                    return uploadedFiles.files.length < Number(attachMaxFiles);
+                };
+
+                const uploadFiles = (filesNew) => {
                     let isCheckExtension;
 
                     if (typeof filesNew !== 'undefined') {
                         for (let i = 0; i < filesNew.length; i += 1) {
                             const fileNew = filesNew[i];
-
                             const { name: fileName } = fileNew;
                             const { size: fileSize } = fileNew;
-                            const sizeErrorMsg = fileSize > attachMaxSize ? errorMessages.size : '';
+                            const sizeErrorMsg = fileSize > attachMaxSize * 1024 * 1024 ? attachMessageMaxSize : '';
 
                             isCheckExtension = false;
 
-                            for (let j = 0; j < fileExtension.length; j += 1) {
-                                if (fileExtension[j] === fileName.split('.').splice(-1, 1)[0]) {
+                            for (let j = 0; j < attachExtensions.length; j += 1) {
+                                if (attachExtensions[j] === fileName.split('.').splice(-1, 1)[0]) {
                                     isCheckExtension = true;
                                     break;
                                 }
                             }
 
-                            if (isCheckExtension) {
-                                if (fileSize <= attachMaxSize) {
-                                    uploadedFiles.items.add(fileNew);
+                            if (isCheckMaxFiles()) {
+                                if (isCheckExtension && fileSize <= attachMaxSize * 1024 * 1024) {
+                                    if (uploadedFiles.items.length <= Number(attachMaxFiles)) {
+                                        uploadedFiles.items.add(fileNew);
+                                    }
                                 }
-                            }
 
-                            renderFile(attachFiles, fileNew, !isCheckExtension ? errorMessages.ext : sizeErrorMsg);
+                                renderFile(attachType, attachItem, attachFiles, fileNew, !isCheckExtension ? attachMessageExtension : sizeErrorMsg);
+                            }
+                        }
+
+                        if (!isCheckMaxFiles()) {
+                            attachItem.classList.add('is-max-files');
+                        } else {
+                            attachInput.files = uploadedFiles.files;
                         }
                     }
-
-                    target.files = uploadedFiles.files;
                 }
-            });
+
+                if (attachExtensions) {
+                    attachExtensions = attachExtensions.split(',');
+
+                    for (let i = 0; i < attachExtensions.length; i++) {
+                        const attachExtension = attachExtensions[i];
+                        attachExtensions[i] = attachExtension.split('.').splice(-1, 1)[0];
+                    }
+                } else {
+                    attachExtensions = EXTENSIONS;
+                }
+
+                attachInput.addEventListener('change', (event) => {
+                    uploadFiles(event.target.files);
+                });
+
+                if (isAdvancedUpload) {
+                    const dragArea = attachItem.querySelector('[data-attach-drag-area]');
+
+                    if (dragArea) {
+                        let droppedFiles = false;
+                        attachItem.classList.add('is-draggable');
+
+                        ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].forEach(function(i) {
+                            dragArea.addEventListener(i, (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            });
+                        });
+
+                        ['dragenter', 'dragover'].forEach(function(i) {
+                            dragArea.addEventListener(i, (e) => {
+                                attachItem.classList.add('is-dragover');
+                            });
+                        });
+
+                        ['dragleave', 'dragend', 'drop'].forEach(function(i) {
+                            dragArea.addEventListener(i, (e) => {
+                                attachItem.classList.remove('is-dragover');
+                            });
+                        });
+
+                        dragArea.addEventListener('drop', (e) => {
+                            droppedFiles = e.dataTransfer.files;
+
+                            if (droppedFiles.length) {
+                                uploadFiles(droppedFiles);
+                            }
+                        });
+                    }
+                }
+            }
 
             attachItem.addEventListener('click', (event) => {
                 const { target } = event;
@@ -151,6 +283,7 @@ export default function attach(containerEl) {
                     uploadedFiles = getNewFileList(attachInput);
 
                     targetFile.remove();
+                    attachItem.classList.remove('is-max-files', 'is-hidden');
                 }
             });
         });

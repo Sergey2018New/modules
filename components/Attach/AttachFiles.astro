@@ -1,18 +1,31 @@
 ---
+import Icon from '@components/modules/Icon.astro';
+
 interface Props {
+    type?: 'files' | 'pictures';
     text?: string;
+    infoText?: string;
     name?: string;
     accept?: string;
     ariaLabel?: string;
+    maxFiles?: number | string;
+    maxSize?: number | string;
+    isMultiple?: boolean;
     class?: string;
     [x: string]: any;
 }
 
 const {
-    text = 'Прикрепить файл',
+    type = 'files',
+    text = 'Загрузите файл',
+    infoText = 'Или перетащите в эту область',
     name = 'files[]',
-    accept = '.doc,.docx,.pdf,.jpg,.jpeg',
-    ariaLabel = 'Прикрепить файл',
+    accept = '.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.gif',
+    ariaLabel = 'Загрузите файл',
+    extensions = 'DOC, DOCX, JPG, XLS, XLSX, PNG, JPG, JPEG, GIF',
+    isMultiple,
+    maxFiles = isMultiple ? 10 : 1,
+    maxSize = 10,
     class: className,
     ...rest
 } = Astro.props;
@@ -20,14 +33,32 @@ const {
 
 <div class:list={[
     "ui-attach",
+    `ui-attach_${type}`,
     className,
 ]} data-attach
+    data-type={type}
     {...rest}
 >
-    <div class="ui-attach__files" data-attach-files></div>
+    {
+        type === 'files' ?
+            <div class="ui-attach__files" data-attach-files></div>
+        : ''
+    }
     <label class="ui-attach__label">
-        <input type="file" class="ui-attach__input" name={name} aria-label={ariaLabel} data-attach-input multiple accept={accept} >
-        <span class="ui-attach__text" set:html={text}></span>
+        <input type="file" class="ui-attach__input" name={name} aria-label={ariaLabel} data-attach-input multiple={isMultiple} accept={accept} data-message-extension={`Допустимые форматы файлов: ${extensions}`} data-max-size={maxSize} data-message-max-size={`Максимальный размер файла ${maxSize} мб`} data-max-files={maxFiles}>
         <span class="ui-attach__focused"></span>
+        {
+            type === 'files' ?
+            <span class="ui-attach__icon-box">
+                <Icon class="ui-attach__icon" name="download"></Icon>
+            </span>
+            <span class="ui-attach__text" set:html={text}></span>
+            <span class="ui-attach__text-info" set:html={infoText}></span>
+            :
+            <Icon class="ui-attach__icon" name="picture"></Icon>
+        }
+        {
+            1 ?  <span class="ui-attach__drag-area" data-attach-drag-area></span> : ''
+        }
     </label>
 </div>

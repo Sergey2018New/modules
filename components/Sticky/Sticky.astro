@@ -1,0 +1,31 @@
+---
+interface Props {
+    offset?: number | string;
+    isHeader?: boolean;
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+	offset = 30,
+	isHeader = false,
+	class: className,
+	...rest
+} = Astro.props;
+
+---
+
+<div
+	class:list={[
+		'sticky',
+		className,
+        'js-sticky',
+	]}
+	{...rest}
+>
+    <div class="sticky__container js-sticky-container">
+        <div class="sticky__block js-sticky-block" data-sticky-offset={offset} data-sticky-is-header={isHeader ? '' : ''}>
+            <slot />
+        </div>
+    </div>
+</div>

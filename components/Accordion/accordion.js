@@ -1,7 +1,7 @@
 /*
-	  ------------- 
+	  -------------
 	|   ACCORDION   |
-	  ------------- 
+	  -------------
 
 	* Basic Attributes:
 		* data-accordions - general wrapper for accordions
@@ -13,7 +13,7 @@
 		* data-accordion-content - drop-down content
 */
 
-/** 
+/**
 	* @param  {Element} accordionsContainer - HTML container element, default document
 	* @param  {number} duration - accordion opening time (also needs to be changed in CSS)
 */
@@ -77,12 +77,11 @@ export default function accordion(accordionsContainer, duration = 300) {
 					isOpen = true;
 				}, duration);
 			}
-			
+
 			accordionEl.setAttribute('data-accordion-init', '');
 
 			if (accordionButton && accordionContent) {
 				if (accordionEl.classList.contains('is-active')) {
-					accordionContent.style.maxHeight = `${accordionContent.scrollHeight}px`;
 					accordionButton.setAttribute('aria-expanded', 'true');
 				}
 
@@ -101,16 +100,9 @@ export default function accordion(accordionsContainer, duration = 300) {
 						}
 					}
 				});
-
-				window.addEventListener('resize', () => {
-					if (accordionEl.classList.contains('is-active')) {
-						accordionContent.style.maxHeight = null;
-						accordionContent.style.maxHeight = `${accordionContent.scrollHeight}px`;
-					}
-				});
 			}
 		};
-		
+
 		accordions.forEach((accordionEl) => {
 			if (!accordionEl.hasAttribute('data-accordion-init')) {
 				accordionInit(accordionEl);

@@ -1,85 +1,65 @@
 ---
 interface Props {
-    type?: "text" | "email" | "textarea" | "datepicker" | "phone";
+    type?: "text" | "email" | "textarea" | "phone" | "number";
+    id?: number | string;
     name?: string;
     placeholder?: string;
-    value?: string;
+    value?: number | string;
     ariaLabel?: string;
+    isDisabled?: boolean;
+    isRequired?: boolean;
+    rows?: number | string;
     class?: string;
     [x: string]: any;
 }
 
 const {
     type = "text",
+    id,
     name,
     placeholder,
     value,
     ariaLabel,
+    isDisabled,
+    isRequired,
+    rows,
+
     class: className,
     ...rest
 } = Astro.props;
 
 const inputClass = type == 'textarea' ? `ui-textarea` : `ui-input`;
-const inputClassPhone = `${inputClass}-phone`;
-const inputClassDatepicker = `${inputClass}-datepicker`;
-
-const classList = [
-    inputClass,
-    className,
-    {...rest}
-];
 
 ---
 {type === 'textarea' ?
     <textarea
-        class:list={classList}
+        id={id}
+        class:list={[
+            inputClass,
+            className,
+        ]}
+        name={name}
+        placeholder={placeholder}
+        rows={rows}
+        aria-label={ariaLabel}
+        disabled={isDisabled ? '' : null}
+        data-js-form-field={isRequired ? '' : null}
+        {...rest}
+    >{value}</textarea>  :
+    <input
+        id={id}
+        class:list={[
+            inputClass,
+            type === 'phone' ? `${inputClass}-phone` : null,
+            className,
+        ]}
+        type={type === 'phone' ? 'text' : type}
         name={name}
         placeholder={placeholder}
         value={value}
         aria-label={ariaLabel}
+        disabled={isDisabled ? '' : null}
+        data-js-form-field={isRequired ? '' : null}
         {...rest}
-    ></textarea>  : ''
+    />
 }
-
-{(type === 'text' || type === 'email') ?
-<input
-    class:list={classList}
-    type={type}
-    name={name}
-    placeholder={placeholder}
-    value={value}
-    aria-label={ariaLabel}
-    {...rest}
-/> : ''}
-
-{type === 'phone' ?
-<input
-    class:list={[
-        inputClass,
-        inputClassPhone,
-        className,
-    ]}
-    type={'text'}
-    name={name}
-    placeholder={placeholder}
-    value={value}
-    aria-label={ariaLabel}
-    {...rest}
-/> : ''}
-
-{type == 'datepicker' ?
-<input
-    class:list={[
-        inputClass,
-        inputClassDatepicker,
-        className,
-    ]}
-    type={'text'}
-    name={name}
-    placeholder={placeholder}
-    value={value}
-    autocomplete="off"
-    data-datepicker
-    aria-label={ariaLabel}
-    {...rest}
-/> : ''}

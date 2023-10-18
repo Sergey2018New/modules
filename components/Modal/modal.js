@@ -185,11 +185,12 @@ modal.init = () => {
 		if (target.closest('[data-modal-open]') || target.hasAttribute('data-modal-open')) {
 			const modalSelector = target.getAttribute('data-modal-open') || target.closest('[data-modal-open]').getAttribute('data-modal-open');
 			const currentModal = modalSelector ? document.querySelector(modalSelector) : '';
+
 			e.preventDefault();
 
 			if (isOpen) {
 				const activeModal = document.querySelector('[data-modal].is-active');
-		
+
 				if (activeModal !== currentModal) {
 					closeModal(activeModal, true);
 					openModal(currentModal, true);
@@ -213,14 +214,12 @@ modal.init = () => {
 	document.addEventListener('keydown', (e) => {
 		const modalActive = document.querySelector('[data-modal].is-active');
 
-		if (e.code === 'Escape' || e.key === 'Escape' && isOpen) {
+		if ((e.code === 'Escape' || e.key === 'Escape') && isOpen) {
 			closeModal(modalActive);
-			return;
 		}
 
-		if (e.code === 'Tab' || e.key === 'Tab' && isOpen) {
+		if ((e.code === 'Tab' || e.key === 'Tab') && isOpen && modalActive) {
 			focusCatcher(e, modalActive);
-			return;
 		}
 	});
 };

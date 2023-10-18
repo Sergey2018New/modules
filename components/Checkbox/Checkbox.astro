@@ -5,8 +5,11 @@ interface Props {
     type?: 'checkbox' | 'radio' | 'toggler';
     name?: string;
     checked?: boolean;
-    value?: string;
+    value?: string | number;
     isText?: boolean;
+    isCheckIcon?: boolean;
+    isDisabled?: boolean;
+    classInput?: string;
     class?: string;
     [x: string]: any;
 }
@@ -17,6 +20,9 @@ const {
     checked,
     value,
     isText = true,
+    isCheckIcon = true,
+    isDisabled = false,
+    classInput,
     class: className,
     ...rest
 } = Astro.props;
@@ -24,7 +30,13 @@ const {
 const checkboxClass = 'ui-checkbox';
 
 function getInput() {
-    return `<input class="${checkboxClass}__input" type="${type === 'radio' ? 'radio' : 'checkbox'}" ${value ? `value="${value}"` : ''} name="${name}" ${checked ? 'checked' : ''}>`;
+    return `<input
+            class="${checkboxClass}__input ${classInput ? classInput : ''}"
+            type="${type === 'radio' ? 'radio' : 'checkbox'}"
+            name="${name}"
+            ${value ? `value="${value}"` : ''}
+            ${checked ? 'checked' : ''}
+        />`;
 }
 ---
 
@@ -36,9 +48,11 @@ function getInput() {
 	]}
 	{...rest}
 >
-   <Fragment set:html={getInput()} />
+    <Fragment set:html={getInput()} />
     <span class={`${checkboxClass}__checked`}>
-        {type === 'checkbox' ? <Icon class={`${checkboxClass}__checked-icon`} name="check"></Icon> : ''}
+        {
+            isCheckIcon ?  <Icon class={`${checkboxClass}__checked-icon`} name="check"></Icon> : ''
+        }
         <span class={`${checkboxClass}__focused`}></span>
     </span>
 

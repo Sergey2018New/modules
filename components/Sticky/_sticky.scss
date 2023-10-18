@@ -5,23 +5,26 @@
     &__container {
         position: relative;
         height: 100%;
+        display: flex;
+        align-items: flex-start;
     }
 
     &__block {
+        width: 100%;
+
         &.is-fixed {
             @include media-min(tab) {
                 position: fixed;
-                top: calc(var(--header-height-fixed) + 3rem);
+                top: var(--sticky-fixed-top, auto);
+                bottom: var(--sticky-fixed-bottom, auto);
             }
         }
 
         &.is-bottom {
             @include media-min(tab) {
-                position: absolute;
-                bottom: 0;
-                left: 0;
+                position: relative;
                 top: auto;
-                width: 100%;
+                margin-top: auto;
             }
         }
     }

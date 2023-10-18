@@ -107,7 +107,7 @@
 
 
 		&:disabled {
-			~ .ui-checkbox__icon,
+			~ .ui-checkbox__checked,
 			~ .checkbox__text {
 				opacity: 0.4;
 				cursor: default;

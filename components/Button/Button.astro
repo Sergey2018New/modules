@@ -1,68 +1,75 @@
 ---
+import Icon from '@components/modules/Icon.astro';
+
 interface Props {
-    type?: "button" | "submit" | "link" | "span";
-    size?: "sm" | "lg";
-    style?: "second";
+    type?: 'button' | 'submit' | 'link';
+    size?: 'sm';
+    style?: 'second';
     fill?: boolean;
     center?: boolean;
     href?: string;
     ariaLabel?: string;
+    icon?: string;
+    disabled?: boolean;
+    textClass?: string;
     class?: string;
     [x: string]: any;
 }
 
 const {
-    type = "button",
+    type = 'button',
     size,
     style,
     fill = false,
     center = false,
-    href = "",
+    href = '',
     ariaLabel,
+    icon,
+    disabled,
+    direction,
+    textClass,
     class: className,
     ...rest
 } = Astro.props;
 
+const ButtonEl = type === 'link' ? 'a' : 'button';
 let buttonClass = 'ui-button';
 
 const styles = {
-  second: `${buttonClass}_style_second`,
+  second: `${buttonClass}_second`,
 };
 
 const sizes = {
-  lg: `${buttonClass}_size_lg`,
+  sm: `${buttonClass}_size_sm`,
 };
 
 const classList =[
     buttonClass,
-    sizes[size],
     styles[style],
+    sizes[size],
     fill ? `${buttonClass}_fill`: '',
     center ? `${buttonClass}_center`: '',
     className,
+    disabled && type === 'link' ? 'is-disabled' : '',
 ]
 ---
-{type == 'link' ?
-    <a
-        href={href}
-        class:list={classList}
-        aria-label={ariaLabel}
-        {...rest}
-    >
-        <slot />
-    </a>
-:  type == 'span' ?
-    <span
-        class:list={classList}
-        {...rest}
-    >
+<ButtonEl
+    type={type !== 'link' ? type : null}
+    href={type === 'link' ? href : null}
+    class:list={classList}
+    aria-label={ariaLabel}
+    disabled={((type === 'submit' || type === 'button') && disabled) ? 'disabled' : null}
+    tabindex={type === 'link' && disabled ? -1 : null}
+    {...rest}
+>
+    {
+        icon ? <Icon class={`${buttonClass}__icon`} name={icon}></Icon> : ''
+    }
+
+    <span class:list={[
+        `${buttonClass}__text`,
+        textClass
+    ]}>
         <slot />
     </span>
-:  <button
-        type={type}
-        class:list={classList}
-        aria-label={ariaLabel}
-        {...rest}
-    ><slot />
-    </button>
-}
+</ButtonEl>
