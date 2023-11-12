@@ -3,11 +3,11 @@
 	|   MODAL  |
 	  --------
 
-	* Basic Attributes:
+	* Basic Classes and attributes:
 		* data-modal-open - attribute for opening a modal window, the value specifies the modal window selector
-		* data-modal - modal window
-		* data-modal-window - visible part of the modal window
-		* data-modal-close - attribute to close the modal window
+		* .js-modal - modal window
+		* .js-modal-window - visible part of the modal window
+		* .js-modal-close - attribute to close the modal window
 
 	* Modal window initialization
 		modal.init()
@@ -65,7 +65,7 @@ const bodyUnlock = () => {
 
 const openModal = (currentModal, isDoubleModal = false) => {
 	if (currentModal && !isOpen && unlock || isDoubleModal) {
-		const modalWindow = currentModal.querySelector('[data-modal-window]');
+		const modalWindow = currentModal.querySelector('.js-modal-window');
 
 		if (!isDoubleModal) {
 			modal.beforeOpen();
@@ -87,7 +87,7 @@ const openModal = (currentModal, isDoubleModal = false) => {
 				modal.afterOpen();
 
 				if (modalWindow) {
-					modalWindow.focus();
+					// modalWindow.focus();
 				}
 
 			}, timeout);
@@ -95,7 +95,8 @@ const openModal = (currentModal, isDoubleModal = false) => {
 
 		setTimeout(() => {
 			if (modalWindow) {
-				modalWindow.focus();
+				// modalWindow.focus();
+                // document.activeElement = modalWindow;
 			}
 
 		}, timeout);
@@ -115,7 +116,7 @@ const closeModal = (activeModal, isDoubleModal = false) => {
 
 		setTimeout(() => {
 			activeModal.scrollTop = 0;
-			activeModal.querySelector('[data-modal-window]').scrollTop = 0;
+			activeModal.querySelector('.js-modal-window').scrollTop = 0;
 			activeModal.classList.remove('is-visible');
 
 			if (!isDoubleModal) {
@@ -185,11 +186,10 @@ modal.init = () => {
 		if (target.closest('[data-modal-open]') || target.hasAttribute('data-modal-open')) {
 			const modalSelector = target.getAttribute('data-modal-open') || target.closest('[data-modal-open]').getAttribute('data-modal-open');
 			const currentModal = modalSelector ? document.querySelector(modalSelector) : '';
-
 			e.preventDefault();
 
 			if (isOpen) {
-				const activeModal = document.querySelector('[data-modal].is-active');
+				const activeModal = document.querySelector('.js-modal.is-active');
 
 				if (activeModal !== currentModal) {
 					closeModal(activeModal, true);
@@ -201,10 +201,10 @@ modal.init = () => {
 
 				openModal(currentModal);
 			}
-		} else if (isOpen && (target.closest('[data-modal-close]') || target.hasAttribute('data-modal-close') ||
-			!target.closest('[data-modal-window]') && !target.hasAttribute('data-modal-window'))
+		} else if (isOpen && (target.closest('.js-modal-close') || target.classList.contains('js-modal-close') ||
+			!target.closest('.js-modal-window') && !target.classList.contains('js-modal-window'))
 		) {
-			const currentModal = target.hasAttribute('data-modal') ? target : target.closest('[data-modal]') || '';
+			const currentModal = target.classList.contains('js-modal') ? target : target.closest('.js-modal') || '';
 			e.preventDefault();
 
 			closeModal(currentModal);
@@ -212,19 +212,21 @@ modal.init = () => {
 	});
 
 	document.addEventListener('keydown', (e) => {
-		const modalActive = document.querySelector('[data-modal].is-active');
+		const modalActive = document.querySelector('.js-modal.is-active');
 
 		if ((e.code === 'Escape' || e.key === 'Escape') && isOpen) {
 			closeModal(modalActive);
+			return;
 		}
 
 		if ((e.code === 'Tab' || e.key === 'Tab') && isOpen && modalActive) {
 			focusCatcher(e, modalActive);
+			return;
 		}
 	});
 };
 
-document.documentElement.modalOpen = modal.open = (selector, callbackCurrent) => {
+document.documentElement.openModal = modal.open = (selector, callbackCurrent) => {
 	const currentModal = selector && typeof selector === 'string' ? document.querySelector(selector) : '';
 
     modalSelectorOpen = null;
@@ -232,7 +234,7 @@ document.documentElement.modalOpen = modal.open = (selector, callbackCurrent) =>
 	callback(callbackCurrent);
 
     if (isOpen) {
-        const activeModal = document.querySelector('[data-modal].is-active');
+        const activeModal = document.querySelector('.js-modal.is-active');
 
         if (activeModal) {
             closeModal(activeModal, true);
@@ -244,6 +246,14 @@ document.documentElement.modalOpen = modal.open = (selector, callbackCurrent) =>
         }
     } else {
         openModal(currentModal);
+    }
+};
+
+document.documentElement.closeModal = modal.close = (selector) => {
+    const currentModal = selector && typeof selector === 'string' ? document.querySelector(selector) : '';
+
+    if (currentModal) {
+        closeModal(currentModal);
     }
 };
 

@@ -1,0 +1,64 @@
+/* ------- Search Form ------- */
+.search-form {
+    &__input {
+        padding-left: 0;
+        border: none;
+        background: none;
+
+        &:focus {
+            background: none;
+        }
+
+        @include media(mob) {
+            height: 5.2rem;
+        }
+    }
+
+    &__clear {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 2rem;
+        height: 2rem;
+        color: var(--color-base, #000);
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--duration, 0.3s) color, var(--duration, 0.3s) opacity, var(--duration, 0.3s) visibility;
+
+       @include hover {
+            color: var(--color-accent, #0000cc);
+       }
+
+        &.is-visible {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+
+    &__clear-icon {
+        width: 2rem;
+        height: 2rem;
+        fill: currentColor;
+    }
+
+    &__icon {
+        width: 3.2rem;
+        height: 3.2rem;
+        mask-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M29.3746 27.9602L21.5499 20.1356C23.2991 18.023 24.1675 15.3176 23.9747 12.5816C23.7819 9.84552 22.5427 7.28882 20.5143 5.4424C18.4861 3.59597 15.8245 2.60169 13.0824 2.66602C10.3403 2.73034 7.72831 3.84833 5.7888 5.78782C3.84931 7.72733 2.73132 10.3393 2.667 13.0814C2.60267 15.8235 3.59695 18.4851 5.44337 20.5134C7.2898 22.5418 9.84649 23.781 12.5826 23.9738C15.3186 24.1666 18.0239 23.2982 20.1366 21.549L27.9613 29.3735L29.3746 27.9602ZM4.66788 13.3334C4.66788 11.6193 5.17617 9.94372 6.12848 8.51849C7.08079 7.09326 8.43433 5.98244 10.018 5.32648C11.6016 4.67052 13.3442 4.49889 15.0253 4.8333C16.7065 5.1677 18.2507 5.99312 19.4629 7.20518C20.6749 8.41724 21.5003 9.96149 21.8347 11.6426C22.1691 13.3238 21.9974 15.0664 21.3415 16.65C20.6855 18.2336 19.5747 19.5872 18.1495 20.5395C16.7242 21.4918 15.0486 22.0002 13.3346 22.0002C11.0368 21.9975 8.83392 21.0836 7.20917 19.4588C5.58443 17.834 4.67049 15.6312 4.66788 13.3334Z' fill='%23353835'/%3E%3C/svg%3E%0A");
+        mask-repeat: no-repeat;
+        mask-size: 100%;
+    }
+
+    &__box {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto auto;
+        align-items: center;
+        gap: 1rem;
+        padding: 0 1rem;
+        border-radius: var(--radius, 1rem);
+        background: #eee;
+    }
+
+    &__submit {}
+}

@@ -26,7 +26,6 @@ const {
     ariaLabel,
     icon,
     disabled,
-    direction,
     textClass,
     class: className,
     ...rest
@@ -35,18 +34,10 @@ const {
 const ButtonEl = type === 'link' ? 'a' : 'button';
 let buttonClass = 'ui-button';
 
-const styles = {
-  second: `${buttonClass}_second`,
-};
-
-const sizes = {
-  sm: `${buttonClass}_size_sm`,
-};
-
 const classList =[
     buttonClass,
-    styles[style],
-    sizes[size],
+    size ? `${buttonClass}_size_${size}`: '',
+    style ? `${buttonClass}_style_${style}`: '',
     fill ? `${buttonClass}_fill`: '',
     center ? `${buttonClass}_center`: '',
     className,
@@ -65,7 +56,6 @@ const classList =[
     {
         icon ? <Icon class={`${buttonClass}__icon`} name={icon}></Icon> : ''
     }
-
     <span class:list={[
         `${buttonClass}__text`,
         textClass

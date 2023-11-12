@@ -10,6 +10,7 @@ const {
 } = Astro.props;
 
 ---
+
 <div 
 	class:list={[
 		'swiper', 
@@ -17,6 +18,7 @@ const {
 	]}
 	{...rest}
 >
+	<slot name="before"/>
     <div class="swiper-wrapper">
         <slot /> 
     </div>

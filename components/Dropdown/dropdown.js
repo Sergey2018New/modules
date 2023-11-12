@@ -3,15 +3,15 @@
 	|   DROPDOWN   |
 	  -------------
 
-	* Basic Attributes:
-		* data-dropdown - dropdown menu wrapper
-		* data-dropdown-button - popup open/close button
-		* data-dropdown-button-text - button text for opening/closing the popup window
-		* data-dropdown-popup - pop-up window
-		* data-dropdown-list - list of dropdown options
-		* data-dropdown-scroll - scroll of dropdown options
-		* data-dropdown-option - list option
-		* data-dropdown-input - Input when selected from dropdown list
+	* Basic Classes:
+		* .js-dropdown - dropdown menu wrapper
+		* .js-dropdown-button - popup open/close button
+		* .js-dropdown-button-text - button text for opening/closing the popup window
+		* .js-dropdown-popup - pop-up window
+		* .js-dropdown-list - list of dropdown options
+		* .js-dropdown-scroll - scroll of dropdown options
+		* .js-dropdown-option - list option
+		* .js-dropdown-input - Input when selected from dropdown list
 */
 
 /**
@@ -25,10 +25,10 @@ export default function dropdown(dropdownContainer, duration = 300) {
 
 	if (dropdownContainer) {
 		if (dropdownContainer instanceof Node) {
-			dropdowns = dropdownContainer.querySelectorAll('[data-dropdown]');
+			dropdowns = dropdownContainer.querySelectorAll('.js-dropdown');
 		}
 	} else {
-		dropdowns = document.querySelectorAll('[data-dropdown]');
+		dropdowns = document.querySelectorAll('.js-dropdown');
 	}
 
 	if (dropdowns.length) {
@@ -38,7 +38,7 @@ export default function dropdown(dropdownContainer, duration = 300) {
             * Get active html dropdown element
         */
         const getActiveDropdown = () => {
-            return document.querySelector('[data-dropdown].is-active');
+            return document.querySelector('.js-dropdown.is-active');
         };
 
         /**
@@ -47,7 +47,7 @@ export default function dropdown(dropdownContainer, duration = 300) {
         */
 		const calcOffsetDropdown = () => {
 			if (getActiveDropdown()) {
-				const dropdownActivePopup = getActiveDropdown().querySelector('[data-dropdown-popup]');
+				const dropdownActivePopup = getActiveDropdown().querySelector('.js-dropdown-popup');
 
 				if (dropdownActivePopup) {
 					dropdownActivePopup.style.removeProperty('margin-left');
@@ -70,7 +70,7 @@ export default function dropdown(dropdownContainer, duration = 300) {
             * @param  {Element} dropdownEl - dropdown html element
         */
         const getFocusedOption = (dropdownEl) => {
-            return dropdownEl.querySelector(`[data-dropdown-option].is-focused`);
+            return dropdownEl.querySelector(`.js-dropdown-option.is-focused`);
         };
 
         /**
@@ -80,8 +80,8 @@ export default function dropdown(dropdownContainer, duration = 300) {
 			if (getActiveDropdown() && isOpeningDropdown) {
                 isOpeningDropdown = false;
 
-                const dropdownPopup = getActiveDropdown().querySelector('[data-dropdown-popup]');
-                const dropdownButton = getActiveDropdown().querySelector('[data-dropdown-button]');
+                const dropdownPopup = getActiveDropdown().querySelector('.js-dropdown-popup');
+                const dropdownButton = getActiveDropdown().querySelector('.js-dropdown-button');
 
                 if (getFocusedOption(getActiveDropdown())) {
                     getFocusedOption(getActiveDropdown()).classList.remove('is-focused');
@@ -110,14 +110,15 @@ export default function dropdown(dropdownContainer, duration = 300) {
             * @param  {Element} dropdownEl - dropdown html element
         */
 		const initDropdown = (dropdownEl) => {
-            const dropdownType = dropdownEl.getAttribute('data-dropdown');
-            const dropdownPopup = dropdownEl.querySelector('[data-dropdown-popup]');
-			const dropdownScroll = dropdownEl.querySelector('[data-dropdown-scroll]');
-			const dropdownList = dropdownEl.querySelector('[data-dropdown-list]');
-			const dropdownOptions = dropdownEl.querySelectorAll('[data-dropdown-option]');
-			const dropdownInput = dropdownEl.querySelector('[data-dropdown-input]');
-			const dropdownButton = dropdownEl.querySelector('[data-dropdown-button]');
-            const dropdownButtonText = dropdownEl.querySelector('[data-dropdown-button-text]');
+            const dropdownType = dropdownEl.getAttribute('data-dropdown-type');
+            const dropdownPopup = dropdownEl.querySelector('.js-dropdown-popup');
+			const dropdownScroll = dropdownEl.querySelector('.js-dropdown-scroll');
+			const dropdownList = dropdownEl.querySelector('.js-dropdown-list');
+			const dropdownOptions = dropdownEl.querySelectorAll('.js-dropdown-option');
+			const dropdownInput = dropdownEl.querySelector('.js-dropdown-input');
+			const dropdownButton = dropdownEl.querySelector('.js-dropdown-button');
+            const dropdownButtonText = dropdownEl.querySelector('.js-dropdown-button-text');
+            const dropdownButtonColor = dropdownEl.querySelector('.js-dropdown-button-color');
             const optionsCount = dropdownOptions.length;
             const dropdownId = Date.now();
             let optionFocusedIndex = -1;
@@ -126,8 +127,8 @@ export default function dropdown(dropdownContainer, duration = 300) {
                 * Get selected option
             */
             const getSelectedOption = () => {
-                return dropdownInput ? dropdownEl.querySelector(
-                    `[data-dropdown-option][data-value="${dropdownInput.value}"]`) : null;
+                return dropdownEl.querySelector(
+                    `.js-dropdown-option.is-selected`) || false;
             };
 
             /**
@@ -241,9 +242,9 @@ export default function dropdown(dropdownContainer, duration = 300) {
                 if (isOpeningDropdown) {
                     isOpeningDropdown = false;
 
-                    const dropdownOptionSelected = dropdownEl.querySelector('[data-dropdown-option].is-selected');
+                    const dropdownOptionSelected = dropdownEl.querySelector('.js-dropdown-option.is-selected');
                     const value = dropdownOption.getAttribute('data-value');
-                    const valueText = dropdownOption.textContent;
+                    const valueText = dropdownOption.getAttribute('data-text-value');
                     const eventChange = new Event('change');
 
                     if (dropdownOptionSelected) {
@@ -260,7 +261,7 @@ export default function dropdown(dropdownContainer, duration = 300) {
                         dropdownList.setAttribute('aria-activedescendant', dropdownOption.id);
                     }
 
-                    if (dropdownButtonText) {
+                    if (dropdownButtonText && dropdownType !== 'color') {
                         dropdownButtonText.textContent = valueText ? valueText : value ? value : '';
                     }
 
@@ -315,9 +316,14 @@ export default function dropdown(dropdownContainer, duration = 300) {
 
 				option.addEventListener('click', () => {
 					changeDropdown(option, true);
+                    updateFocusedOption(index);
 				});
 
                 option.addEventListener('mouseenter', () => {
+					updateFocusedOption(-1);
+				});
+
+                option.addEventListener('mouseleave', () => {
 					updateFocusedOption(index);
 				});
 			});
@@ -327,7 +333,7 @@ export default function dropdown(dropdownContainer, duration = 300) {
                 [].indexOf.call(dropdownOptions, getSelectedOption()) : -1;
 
 				dropdownInput.addEventListener('change', (event) => {
-					const optionCurrent = dropdownEl.querySelector(`[data-dropdown-option][data-value="${event.target.value}"]`);
+					const optionCurrent = dropdownEl.querySelector(`.js-dropdown-option[data-value="${event.target.value}"]`);
 
 					if (optionCurrent) {
 						changeDropdown(optionCurrent);
@@ -345,7 +351,7 @@ export default function dropdown(dropdownContainer, duration = 300) {
                         openDropdown();
                     }
 
-                    if (document.activeElement.closest('[data-dropdown-list]')) {
+                    if (document.activeElement.closest('.js-dropdown-list')) {
                         if (dropdownEl.classList.contains('is-active')) {
                             if (getFocusedOption(dropdownEl)) {
                                 changeDropdown(getFocusedOption(dropdownEl));
@@ -362,21 +368,27 @@ export default function dropdown(dropdownContainer, duration = 300) {
             });
 
             dropdownEl.addEventListener('keydown', (e) => {
-                if (dropdownType) {
+                if ((e.key === 'ArrowDown' || e.code === 'ArrowDown')) {
 
-                }
+                    if (optionFocusedIndex < optionsCount - 1) {
+                        updateFocusedOption(optionFocusedIndex + 1);
+                    } else {
+                        updateFocusedOption(0);
+                    }
 
-                if ((e.key === 'ArrowDown' || e.code === 'ArrowDown')
-                && optionFocusedIndex < optionsCount - 1) {
-                    updateFocusedOption(optionFocusedIndex + 1);
                     setScrollTop();
                     e.preventDefault();
                 }
 
                 // press up -> go previous
-                if ((e.key === 'ArrowUp' || e.code === 'ArrowUp')
-                    && optionFocusedIndex > 0) {
-                    updateFocusedOption(optionFocusedIndex - 1);
+                if ((e.key === 'ArrowUp' || e.code === 'ArrowUp')) {
+
+                    if (optionFocusedIndex > 0) {
+                        updateFocusedOption(optionFocusedIndex - 1);
+                    } else {
+                        updateFocusedOption(optionsCount - 1);
+                    }
+
                     setScrollTop();
                     e.preventDefault();
                 }
@@ -384,12 +396,12 @@ export default function dropdown(dropdownContainer, duration = 300) {
                 // press tab
                 if (e.code === 'Tab' || e.key === 'Tab') {
                     if (dropdownType === 'select'
-                        && document.activeElement.closest('[data-dropdown].is-active')) {
+                        && document.activeElement.closest('.js-dropdown.is-active')) {
                         closeDropdownActive(e);
                     }
 
                     if (dropdownType === 'menu'
-                        && !document.activeElement.closest('[data-dropdown].is-active')) {
+                        && !document.activeElement.closest('.js-dropdown.is-active')) {
                         closeDropdownActive(e);
                     }
                 }
@@ -409,7 +421,7 @@ export default function dropdown(dropdownContainer, duration = 300) {
         document.addEventListener('click', (event) => {
             const { target } = event;
 
-            if (!target.hasAttribute('data-dropdown') && !target.closest('[data-dropdown]')) {
+            if (!target.classList.contains('js-dropdown') && !target.closest('.js-dropdown')) {
                 closeDropdownActive(event);
 			}
         });
@@ -417,7 +429,7 @@ export default function dropdown(dropdownContainer, duration = 300) {
         document.addEventListener('keyup', (event) => {
             if ((event.code === 'Tab' || event.key === 'Tab')
                 && getActiveDropdown()
-                && !document.activeElement.closest('[data-dropdown].is-active')) {
+                && !document.activeElement.closest('.js-dropdown.is-active')) {
                 closeDropdownActive(event);
             }
         });

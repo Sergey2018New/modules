@@ -26,8 +26,8 @@ $breakpoint-adaptive: tab;
         height: 5rem;
         text-decoration: none;
         text-align: center;
-        color: $white;
-        background: $black;
+        color: var(--color-white, #fff);
+        background: var(--color-black, #000);
         transition-property: background, color, border-color;
 
         @include media($breakpoint-adaptive) {
@@ -35,7 +35,7 @@ $breakpoint-adaptive: tab;
             height: auto;
             text-align: left;
             padding: 1rem 2rem;
-            color: $base-color;
+            color: var(--color-base, #000);
             background: none;
         }
 
@@ -55,9 +55,9 @@ $breakpoint-adaptive: tab;
             top: 0;
             height: calc(var(--vh, 1vh) * 100);
             display: block;
-            background: $backdrop;
+            background: var(--color-backdrop, rgba(0, 0, 0, 0.7));
             opacity: 0;
-            transition: $duration opacity;
+            transition: var(--duration, 0.3s) opacity;
             pointer-events: none;
             will-change: opacity;
 
@@ -76,7 +76,7 @@ $breakpoint-adaptive: tab;
             overflow-y: auto;
             height: 100%;
             pointer-events: auto;
-            background: $white;
+            background: var(--color-white, #fff);
         }
     }
 
@@ -91,8 +91,8 @@ $breakpoint-adaptive: tab;
             width: 100%;
             max-width: 100%;
             overflow: hidden;
-            transform: translate(-100%, 0);
-            transition: $duration transform, $duration opacity;
+            transform: translate(100%, 0);
+            transition: var(--duration, 0.3s) transform, var(--duration, 0.3s) opacity;
             opacity: 0;
             will-change: transform, opacity;
 
@@ -118,7 +118,7 @@ $breakpoint-adaptive: tab;
         display: none;
         width: $burger-width;
         height: $burger-height;
-        background: $black;
+        background: var(--color-black, #000);
 
         span {
             position: absolute;
@@ -127,8 +127,8 @@ $breakpoint-adaptive: tab;
             margin-top: calc($burger-line-height * (-0.5));
             width: $burger-line-width;
             height: $burger-line-height;
-            background: $white;
-            transition: $duration transform;
+            background: var(--color-white, #fff);
+            transition: var(--duration, 0.3s) transform;
             will-change: transform, opacity;
 
             &:first-child {
@@ -184,7 +184,7 @@ $breakpoint-adaptive: tab;
             width: 2.6rem;
             margin-top: -1px;
             margin-left: -1.3rem;
-            background: $base-color;
+            background: var(--color-base, #000);
             transform: rotate(45deg);
             will-change: transform;
         }

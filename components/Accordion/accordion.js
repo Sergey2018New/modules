@@ -4,43 +4,43 @@
 	  -------------
 
 	* Basic Attributes:
-		* data-accordions - general wrapper for accordions
-		* data-accordion - accordion block
+		* .js-accordions - general wrapper for accordions
+		* .js-accordion - accordion block
 			** If it is necessary to close neighboring accordions, then specify the data-accordion-one attribute
 			** If you want to always display the active accordion (without the possibility of closing), then specify the data-accordion-visible attribute
 			** If by default you want to show the accordion, then you need to specify the classes .is-active.is-visible
-		* data-accordion-button - open/close dropdown content button
-		* data-accordion-content - drop-down content
+		* .js-accordion-button - open/close dropdown content button
+		* .js-accordion-content - drop-down content
 */
 
 /**
 	* @param  {Element} accordionsContainer - HTML container element, default document
 	* @param  {number} duration - accordion opening time (also needs to be changed in CSS)
 */
-export default function accordion(accordionsContainer, duration = 300) {
+export default function setAccordion(accordionsContainer, duration = 300) {
 	let accordions;
 
 	if (accordionsContainer) {
 		if (accordionsContainer instanceof Node) {
-			accordions = accordionsContainer.querySelectorAll('[data-accordion]');
+			accordions = accordionsContainer.querySelectorAll('.js-accordion');
 		}
 	} else {
-		accordions = document.querySelectorAll('[data-accordion]');
+		accordions = document.querySelectorAll('.js-accordion');
 	}
 
 	if (accordions.length) {
 		const accordionInit = (accordionEl) => {
-			const accordionButton = accordionEl.querySelector('[data-accordion-button]');
-			const accordionContent = accordionEl.querySelector('[data-accordion-content]');
+			const accordionButton = accordionEl.querySelector('.js-accordion-button');
+			const accordionContent = accordionEl.querySelector('.js-accordion-content');
 			let isOpen = true;
 			const accordionItem = () => {
 				isOpen = false;
 
 				if (accordionEl.hasAttribute('data-accordion-one')) {
-					const accordionActive = accordionEl.closest('[data-accordions]').querySelector('[data-accordion].is-active');
+					const accordionActive = accordionEl.closest('.js-accordions').querySelector('.js-accordion.is-active');
 
 					if (accordionActive && accordionActive !== accordionEl) {
-						const accordionActiveContent = accordionActive.querySelector('[data-accordion-content]');
+						const accordionActiveContent = accordionActive.querySelector('.js-accordion-content');
 
 						accordionActive.classList.remove('is-active', 'is-visible');
 						accordionButton.setAttribute('aria-expanded', 'false');
@@ -78,7 +78,7 @@ export default function accordion(accordionsContainer, duration = 300) {
 				}, duration);
 			}
 
-			accordionEl.setAttribute('data-accordion-init', '');
+			accordionEl.classList.add('is-init');
 
 			if (accordionButton && accordionContent) {
 				if (accordionEl.classList.contains('is-active')) {
@@ -104,7 +104,7 @@ export default function accordion(accordionsContainer, duration = 300) {
 		};
 
 		accordions.forEach((accordionEl) => {
-			if (!accordionEl.hasAttribute('data-accordion-init')) {
+			if (!accordionEl.classList.contains('is-init')) {
 				accordionInit(accordionEl);
 			}
 		});

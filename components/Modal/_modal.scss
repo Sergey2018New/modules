@@ -6,12 +6,12 @@
 	z-index: 200;
 	display: none;
 	width: 100%;
-	height: calc(var(--vh, 1vh) * 100);
+	height: calc(var(--vh, 1%) * 100);
 	overflow: hidden;
     overflow-y: auto;
 	opacity: 0;
-	background: $backdrop;
-	transition: $duration opacity;
+	background: var(--color-backgrop, rgba(0, 0, 0, 0.7));
+	transition: var(--duration, 0.3s) opacity;
 
 	&__close {
 		position: absolute;
@@ -24,11 +24,11 @@
 		width: 4rem;
 		height: 4rem;
 		background: transparent;
-        transition: $duration color, $duration background;
+        transition: var(--duration, 0.3s) color, var(--duration, 0.3s) background;
 
 		&:hover,
 		&:active {
-			color: $accent;
+            color: var(--color-accent, #0000cc);
 		}
 	}
 
@@ -47,7 +47,7 @@
 		flex-shrink: 0;
 		flex-grow: 0;
 		margin: auto;
-		padding: $gutters;
+		padding: var(--gutters, 4rem);
 		width: 100%;
 		min-height: 100%;
 	}
@@ -59,7 +59,7 @@
 		padding: 5rem 4rem;
 		width: 60rem;
 		max-width: 100%;
-		background: $white;
+		background: var(--color-white, #fff);
 
         &:focus-visible,
 		&:focus {
@@ -83,7 +83,6 @@
 
 	&.is-active {
 		opacity: 1;
-		transition: $duration;
 	}
 }
 

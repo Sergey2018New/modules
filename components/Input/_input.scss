@@ -10,35 +10,35 @@ input {
 	appearance: none;
 	display: block;
 	box-shadow: none;
-	border: 1px solid $input-border;
+	border: 1px solid var(--color-border, #ddd);
 	border-radius: 0;
 	outline: none;
 	padding: 0 1.5rem;
 	width: 100%;
-	height: $input-height;
-	font-family: $font-primary;
-	font-size: $font-size-normal;
+	height: var(--input-height, 4rem);
+	font-family: var(--font-family);
+	font-size: var(--text-size, 1.6rem);
 	text-align: left;
-	color: $base-color;
-	background: $white;
-	transition: $duration background-color, $duration color, $duration border-color, $duration box-shadow;
+	color: var(--color-base, #000);
+	background: var(--color-white, #fff);
+	transition: var(--duration, 0.3s) background-color, var(--duration, 0.3s) color, var(--duration, 0.3s) border-color, var(--duration, 0.3s) box-shadow;
 
 	&::placeholder {
-	  color: $placeholder;
-	  transition: $duration color;
+	  color: var(--color-placeholder, #999);
+	  transition: var(--duration, 0.3s) color;
 	}
 
 	&:focus {
-		border-color: $base-color;
+		border-color: var(--color-base, #000);
 	}
 
 	@include disabled {
-		color: $disabled-color;
-		background-color: $disabled-background;
+		color: rgba(var(--color-white-rgb, #{255, 255, 255}), 0.5);
+		background-color: var(--color-disabled, #999);
 	}
 
 	@include error {
-		border-color: $error;
+		border-color: var(--color-error);
 	}
 }
 
@@ -50,7 +50,7 @@ input {
 
 	@include media-min(1025) {
 		scrollbar-width: thin;
-		scrollbar-color: rgba($black, 0.3);
+		scrollbar-color: rgba(var(--color-black-rgb, #{0, 0, 0}), 0.3);
 
 		&::-webkit-scrollbar {
             width: 1rem;
@@ -58,10 +58,10 @@ input {
 		}
 
 		&::-webkit-scrollbar-thumb {
-			border-left: 0.4rem solid $white;
-			border-right: 0.4rem solid $white;
-			background: rgba($black, 0.3);
-			transition: $duration background;
+			border-left: 0.4rem solid var(--color-white, #fff);
+			border-right: 0.4rem solid var(--color-white, #fff);
+			background: rgba(var(--color-black-rgb, #{0, 0, 0}), 0.3);
+			transition: var(--duration, 0.3s) background;
 		}
 
 		&::-webkit-scrollbar-track {

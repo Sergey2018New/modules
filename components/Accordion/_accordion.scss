@@ -9,9 +9,9 @@
         padding: 2rem;
         text-align: left;
         background: #eee;
+        transition: var(--duration, 0.3s) background;
         cursor: pointer;
         user-select: none;
-        transition: $duration background;
 
         &:hover {
             background: #ddd;
@@ -40,8 +40,8 @@
             mask-size: 100%;
             mask-repeat: no-repeat;
             mask-position: center;
-            background: $black;
-            transition: $duration transform;
+            background: var(--color-black, #000);
+            transition: var(--duration, 0.3s) transform;
             will-change: transform;
         }
 
@@ -64,8 +64,8 @@
                 margin-top: -1px;
                 width: 2rem;
                 height: 2px;
-                background: $black;
-                transition: $duration opacity;
+                background: var(--color-black, #000);
+                transition: var(--duration, 0.3s) opacity;
             }
 
             &::after {
@@ -83,7 +83,7 @@
         overflow: hidden;
         visibility: hidden;
         opacity: 0;
-        transition: max-height $duration ease-out, visibility $duration, opacity $duration;
+        transition: max-height var(--duration, 0.3s), visibility var(--duration, 0.3s), opacity var(--duration, 0.3s);
     }
 
     &.is-active {

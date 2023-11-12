@@ -1,0 +1,40 @@
+---
+import Input from '@components/modules/Input.astro';
+import Button from '@components/modules/Button.astro';
+
+interface Props {
+    value?: string;
+    inputClass?: string;
+    clearClass?: string;
+    class?: string;
+    [x: string]: any;
+}
+
+const {
+    value,
+    inputClass,
+    clearClass,
+    class: className,
+    ...rest
+} = Astro.props;
+
+---
+<form
+    action="#"
+    class:list={[
+        "search-form",
+        className,
+    ]}
+    {...rest}
+>
+	<div class="search-form__box">
+        <span class="search-form__icon"></span>
+        <Input class={`search-form__input ${inputClass ? inputClass : ''}`} value={value} placeholder="Поиск"></Input>
+        <button class={`search-form__clear ${clearClass ? clearClass : ''}`} type="button" title="Очистить">
+            <svg class="search-form__clear-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                <path d="M17.2578 3.92247L16.0794 2.74414L10.0019 8.82167L3.92443 2.74414L2.74609 3.92247L8.82359 10L2.74609 16.0775L3.92443 17.2558L10.0019 11.1783L16.0794 17.2558L17.2578 16.0775L11.1803 10L17.2578 3.92247Z" />
+            </svg>
+        </button>
+        <Button class="search-form__submit" type="submit">Найти</Button>
+    </div>
+</form>

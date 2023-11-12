@@ -4,26 +4,33 @@
 
 	&__label {
 		position: absolute;
-        top: 0.7rem;
-		width: 100%;
-        font-size: $base-font-size;
+        left: 2rem;
+        top: 1.7rem;
+		max-width: calc(100% - 4rem);
         font-weight: 400;
-        color: $placeholder;
+        color: var(--color-placeholder, rgba(46, 54, 62, 0.7));
 		transform-origin: 0 0;
-		transition: transform $duration;
+		transition: color var(--duration, 0.3s), transform var(--duration, 0.3s);
 		pointer-events: none;
 		will-change: transform;
 	}
 
 	&__input {
-        padding: 0;
-        border-width: 0;
-        border-bottom-width: 1px;
         width: 100%;
+        padding-top: 2rem;
 
 		&::placeholder {
 			color: transparent;
 		}
+
+        &:focus {
+            border-color: var(--color-accent, #9F7ADB);
+        }
+
+        &.is-error {
+            border-color: var(--color-error, #f00);
+
+        }
 	}
 
     &__content {
@@ -31,15 +38,23 @@
     }
 
     &__textarea {
-        min-height: 13rem;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
     }
 
     &_textarea {
         .field-box {
             &__label {
-                background: $white;
+                background: var(--color-white, #fff);
+            }
+        }
+    }
+
+    &.is-hovered {
+        .field-box {
+            &__label {
+	            color: var(--color-base, rgb(46, 54, 62));
+
             }
         }
     }
@@ -47,11 +62,8 @@
 	&.is-filed,
 	&.is-focused {
 		.field-box__label {
-			transform: translateY(-1.6rem) scale(0.75);
-		}
-
-        .field-box__input:not(.is-error) {
-            border-bottom-color: $base-color;
+			transform: translateY(-0.8rem) scale(0.75);
+	        color: var(--color-placeholder, rgba(46, 54, 62, 0.7));
 		}
 	}
 }

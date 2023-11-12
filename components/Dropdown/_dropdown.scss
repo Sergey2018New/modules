@@ -43,7 +43,7 @@
         mask-size: 100%;
         background: currentColor;
 		will-change: transform;
-        transition: $duration transform;
+        transition: var(--duration, 0.3s) transform;
 	}
 
 	&__popup {
@@ -51,14 +51,14 @@
 		z-index: 50;
 		margin-top: 0.5rem;
 		padding: 1rem 0;
-		box-shadow: 0 0 1rem rgba($black, 0.1);
+		box-shadow: 0 0 1rem var(rgba(var(--color-black), 0.5),rgba(0, 0, 0, 0.1));
 		width: 24rem;
         max-width: 100vw;
-		background: $white;
+		background: var(--color-white, #fff);
 		opacity: 0;
 		visibility: hidden;
 		pointer-events: none;
-		transition: $duration visibility, $duration opacity;
+		transition: var(--duration, 0.3s) visibility, var(--duration, 0.3s) opacity;
 	}
 
     &__list {
@@ -76,13 +76,13 @@
 
 		.simplebar-scrollbar {
 			&::before {
-				background: $accent;
+				background: var(--color-accent, #0000cc);
 			}
 		}
 
         @include media-min(1025) {
             scrollbar-width: thin;
-            scrollbar-color: rgba($black, 0.3);
+            scrollbar-color: var(rgba(--color-black, 0.5), rgba(0, 0, 0, 0.5));
 
             &::-webkit-scrollbar {
                 width: 1rem;
@@ -90,10 +90,10 @@
             }
 
             &::-webkit-scrollbar-thumb {
-                border-left: 0.4rem solid $white;
-                border-right: 0.4rem solid $white;
-                background: rgba($black, 0.3);
-                transition: $duration background;
+                border-left: 0.4rem solid var(--color-white, #fff);
+                border-right: 0.4rem solid var(--color-white, #fff);
+                background: var(rgba(--color-black, 0.5), rgba(0, 0, 0, 0.5));
+                transition: var(--duration, 0.3s) background;
             }
 
             &::-webkit-scrollbar-track {
@@ -120,34 +120,34 @@
 	}
 
 	&__menu-link,
-    &__list-option {
+    &__option {
 		display: block;
 		padding: 1rem 2rem;
 		width: 100%;
-		font-size: var(--text-size);
+		font-size: var(--text-size, 1.6rem);
 		line-height: 1.4;
 		text-decoration: none;
 		text-align: left;
-		transition: $duration color, $duration background;
+		transition: var(--duration, 0.3s) color, var(--duration, 0.3s) background;
 		cursor: pointer;
 		user-select: none;
 
         &.is-selected {
-			background: rgba($black, 0.1);
+			background: var(rgba(--color-black, 0.1), rgba(0, 0, 0, 0.1));
 		}
 
 		&.is-focused,
         &:focus-visible {
             outline: none;
-            color: $white;
-			background: $accent;
+            color: var(--color-white, #fff);
+			background: var(--color-accent, #0000cc);
 		}
 	}
 
     &__menu-link {
         @include hover {
-            color: $white;
-			background: $accent;
+            color: var(--color-white, #fff);
+			background: var(--color-accent, #0000cc);
         }
     }
 
