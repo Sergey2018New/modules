@@ -33,7 +33,7 @@
 /**
     * @param  {Element} tabsContainer - HTML container element, default document
 */
-export default function tabs(tabsContainer) {
+export default function setTabs(tabsContainer) {
 	let tabsElements;
 
 	if (tabsContainer) {
