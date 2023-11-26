@@ -22,12 +22,12 @@
         height: 4rem;
         text-align: center;
         background: lightgrey;
-        transition: $duration color, $duration background;
+        transition: var(--duration, 0.3s) color, var(--duration, 0.3s) background;
         cursor: pointer;
 
         &.is-active {
-            color: $white;
-            background: $accent;
+            color: var(--color-white, #fff);
+            background: var(--color-accent, #0000cc);
         }
     }
 }

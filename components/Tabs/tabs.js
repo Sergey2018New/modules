@@ -3,29 +3,31 @@
 	|   TABS   |
 	  --------
 
-	* Basic Attributes:
-		* data-tabs - general wrapper for tabs
-		* data-tabs-menu - tab menu
-		* data-tabs-item - menu item
-			** The attribute value must be unique inside the data-tabs wrapper
-			** Additionally, you can specify the data-value attribute with the value of the tab name
-				(required to change the text of the button that opens the menu list)
-		* data-tabs-pane - drop-down panel
-			** The value of the attribute must match the value of the data-tabs-item attribute
+	* Basic Selectors:
+		* .js-tabs - general wrapper for tabs
+		* .js-tabs-menu - tab menu
+		* .js-tabs-item - menu item
+            ** [data-tabs-id] - attribute to set tab id
+                *** The attribute value must be unique inside the .js-tabs wrapper
+                *** Additionally, you can specify the data-value attribute with the value of the tab name
+                    (required to change the text of the button that opens the menu list)
+		* .js-tabs-pane - drop-down panel
+            ** [data-tabs-pane]- attribute to set tab id
+			    *** The value of the attribute must match the value of the data-tabs-id attribute in the .js-tabs-item selector
 
 	* Additional attributes:
-		* data-tabs-list - list of menu items
-		* data-tabs-overlay - dynamic bar for menu items
-		* data-tabs-prev - back tab navigation
-		* data-tabs-next - forward tab navigation
-		* data-tabs-button - button that opens the menu list (for adaptive)
-		* data-tabs-button-text - the text of the button that opens the menu list (for adaptive)
+		* .js-tabs-list - list of menu items
+		* .js-tabs-backdrop - dynamic bar for menu items
+		* .js-tabs-prev - back tab navigation
+		* .js-tabs-next - forward tab navigation
+		* .js-tabs-button - button that opens the menu list (for adaptive)
+		* .js-tabs-button-text - the text of the button that opens the menu list (for adaptive)
 			** The attribute value is substituted from the active menu item from the data-value attribute
 
 	* Functional attributes (can be specified on any HTML element):
-		* data-tabs-switch - adds an HTML element the ability to switch given tabs
+		* .js-tabs-switch - adds an HTML element the ability to switch given tabs
 			** The value of the attribute must match the value of the data-tabs attribute
-		* data-tabs-switch-pane - an attribute that specifies a specific tab from the data-tabs-pane attribute
+		* .js-tabs-switch-pane - an attribute that specifies a specific tab from the data-tabs-pane attribute
 */
 
 /**
@@ -36,25 +38,25 @@ export default function tabs(tabsContainer) {
 
 	if (tabsContainer) {
 		if (tabsContainer instanceof Node) {
-			tabsElements = tabsContainer.querySelectorAll('[data-tabs]');
+			tabsElements = tabsContainer.querySelectorAll('.js-tabs');
 		}
 	} else {
-		tabsElements = document.querySelectorAll('[data-tabs]');
+		tabsElements = document.querySelectorAll('.js-tabs');
 	}
 
     if (tabsElements.length) {
         /**
-            * Change back overlay
+            * Change backdrop
             * @param  {Element} tabsCurrent - HTML element of tabs
-            * @param  {Element} tabsOverlay - HTML overlay element
+            * @param  {Element} tabsBackdrop - HTML backdrop element
         */
-        const changeOverlay = (tabsCurrent, tabsOverlay) => {
+        const changeBackdrop = (tabsCurrent, tabsBackdrop) => {
             setTimeout(() => {
-                const tabActive = tabsCurrent.querySelector('[data-tabs-item].is-active');
+                const tabActive = tabsCurrent.querySelector('.js-tabs-item.is-active');
 
-                if (tabsOverlay && tabActive) {
-                    tabsOverlay.style.width = `${tabActive.offsetWidth}px`;
-                    tabsOverlay.style.left = `${tabActive.offsetLeft}px`;
+                if (tabsBackdrop && tabActive) {
+                    tabsBackdrop.style.width = `${tabActive.offsetWidth}px`;
+                    tabsBackdrop.style.left = `${tabActive.offsetLeft}px`;
                 }
             }, 10);
         };
@@ -68,14 +70,14 @@ export default function tabs(tabsContainer) {
         const moveTab = (tabs, tabCurrent, tabsButton) => {
             if (!tabs || !tabCurrent) return;
 
-            const tabActive = tabs.querySelector('[data-tabs-item].is-active');
+            const tabActive = tabs.querySelector('.js-tabs-item.is-active');
 
             let panelActive;
-            let panelCurrent = tabs.querySelector(`[data-tabs-pane="${tabCurrent.getAttribute('data-tabs-item')}"]`);
+            let panelCurrent = tabs.querySelector(`.js-tabs-pane[data-tabs-pane="${tabCurrent.getAttribute('data-tabs-id')}"]`);
 
             if (tabActive) {
                 tabActive.classList.remove('is-active');
-                panelActive = tabs.querySelector(`[data-tabs-pane="${tabActive.getAttribute('data-tabs-item')}"]`);
+                panelActive = tabs.querySelector(`.js-tabs-pane[data-tabs-pane="${tabActive.getAttribute('data-tabs-id')}"]`);
             }
 
             if (panelActive) {
@@ -89,7 +91,7 @@ export default function tabs(tabsContainer) {
             }
 
             if (tabsButton) {
-                const tabsButtonText = tabsButton.querySelector('[data-tabs-button-text]');
+                const tabsButtonText = tabsButton.querySelector('.js-tabs-button-text');
 
                 if (tabsButtonText) {
                     tabsButtonText.textContent = tabCurrent.getAttribute('data-value') || '';
@@ -101,8 +103,8 @@ export default function tabs(tabsContainer) {
             * Close drop down menu of tabs
         */
         const closeTabsList =  () => {
-            const tabsButtonActive = document.querySelector('[data-tabs-button].is-active');
-            const tabsListActive = document.querySelector('[data-tabs-list].is-active');
+            const tabsButtonActive = document.querySelector('.js-tabs-button.is-active');
+            const tabsListActive = document.querySelector('.js-tabs-list.is-active');
 
             if (tabsButtonActive) {
                 tabsButtonActive.classList.remove('is-active');
@@ -115,14 +117,14 @@ export default function tabs(tabsContainer) {
         /**
             * Tab navigation
             * @param  {Element} tabs - HTML element of tabs
-            * @param  {Element} tabsOverlay - menu item background HTML element
+            * @param  {Element} tabsBackdrop - menu item background HTML element
             * @param  {Element} direction - Tab navigation direction
         */
-        const tabNavigation = (tabs, tabsOverlay, direction) => {
+        const tabNavigation = (tabs, tabsBackdrop, direction) => {
             if (!tabs) return;
 
-            let tabActive = tabs.querySelector('[data-tabs-item].is-active');
-            let tabsButton = tabs.querySelector('[data-tabs-button]');
+            let tabActive = tabs.querySelector('.js-tabs-item.is-active');
+            let tabsButton = tabs.querySelector('.js-tabs-button');
 
             if (tabActive) {
                 let tabCurrent = tabActive.nextElementSibling;
@@ -134,8 +136,8 @@ export default function tabs(tabsContainer) {
                 if (tabCurrent) {
                     moveTab(tabs, tabCurrent, tabsButton);
 
-                    if (tabsOverlay) {
-                        changeOverlay (tabs, tabsOverlay);
+                    if (tabsBackdrop) {
+                        changeBackdrop (tabs, tabsBackdrop);
                     }
                 }
             }
@@ -148,7 +150,7 @@ export default function tabs(tabsContainer) {
             * @param  {Element} tabNavNext - Button to move tabs to the right
         */
         const isDisabledTabNavigation = (tabs, tabNavPrev, tabNavNext) => {
-            let tabActive = tabs.querySelector('[data-tabs-item].is-active');
+            let tabActive = tabs.querySelector('.js-tabs-item.is-active');
 
             if (tabNavPrev) {
                 if (tabActive.previousElementSibling) {
@@ -169,21 +171,21 @@ export default function tabs(tabsContainer) {
 
         tabsElements.forEach((tabs) => {
             const tabsInit = () => {
-                const tabsButton = tabs.querySelector('[data-tabs-button]');
-                const tabsMenu = tabs.querySelector('[data-tabs-menu]');
-                const tabsList = tabs.querySelector('[data-tabs-list]');
-                const tabsItems = tabsMenu ? tabsMenu.querySelectorAll('[data-tabs-item]') : '';
-                const tabsOverlay = tabs.querySelector('[data-tabs-overlay]');
-                const tabsPrev = tabs.querySelector('[data-tabs-prev]');
-                const tabsNext = tabs.querySelector('[data-tabs-next]');
+                const tabsButton = tabs.querySelector('.js-tabs-button');
+                const tabsMenu = tabs.querySelector('.js-tabs-menu');
+                const tabsList = tabs.querySelector('.js-tabs-list');
+                const tabsItems = tabsMenu ? tabsMenu.querySelectorAll('.js-tabs-item') : '';
+                const tabsBackdrop = tabs.querySelector('.js-tabs-backdrop');
+                const tabsPrev = tabs.querySelector('.js-tabs-prev');
+                const tabsNext = tabs.querySelector('.js-tabs-next');
 
                 tabs.setAttribute('data-tabs-init', '');
 
-                changeOverlay(tabs, tabsOverlay);
+                changeBackdrop(tabs, tabsBackdrop);
                 isDisabledTabNavigation(tabs, tabsPrev, tabsNext);
 
                 window.addEventListener('resize', () => {
-                    changeOverlay(tabs, tabsOverlay);
+                    changeBackdrop(tabs, tabsBackdrop);
                 });
 
                 if (tabsItems) {
@@ -192,7 +194,7 @@ export default function tabs(tabsContainer) {
                             const target = event.currentTarget;
 
                             moveTab(tabs, target, tabsButton);
-                            changeOverlay(tabs, tabsOverlay);
+                            changeBackdrop(tabs, tabsBackdrop);
                             isDisabledTabNavigation(tabs, tabsPrev, tabsNext);
                         });
                     });
@@ -202,7 +204,7 @@ export default function tabs(tabsContainer) {
                     tabsPrev.addEventListener('click', (e) => {
                         e.preventDefault();
 
-                        tabNavigation(tabs, tabsOverlay, 'prev');
+                        tabNavigation(tabs, tabsBackdrop, 'prev');
                         isDisabledTabNavigation(tabs, tabsPrev, tabsNext);
                     });
                 }
@@ -211,7 +213,7 @@ export default function tabs(tabsContainer) {
                     tabsNext.addEventListener('click', (e) => {
                         e.preventDefault();
 
-                        tabNavigation(tabs, tabsOverlay, 'next');
+                        tabNavigation(tabs, tabsBackdrop, 'next');
                         isDisabledTabNavigation(tabs, tabsPrev, tabsNext);
                     });
                 }
@@ -237,27 +239,27 @@ export default function tabs(tabsContainer) {
         document.addEventListener('click', (event) => {
             let target = event.target;
 
-            if (target.hasAttribute('data-tabs-switch') || target.closest('[data-tabs-switch]')) {
+            if (target.classList.contains('js-tabs-switch') || target.closest('.js-tabs-switch')) {
                 event.preventDefault();
 
                 const tabsSwitch = document.querySelector(`[data-tabs="${target.getAttribute('data-tabs-switch')}"]`);
 
                 if (tabsSwitch) {
-                    const tabsPrev = tabsSwitch.querySelector('[data-tabs-prev');
-                    const tabsNext = tabsSwitch.querySelector('[data-tabs-next');
-                    const tabCurrent = tabsSwitch.querySelector(`[data-tabs-item="${target.getAttribute('data-tabs-switch-pane')}"]`);
-                    const tabsOverlay = tabsSwitch.querySelector('[data-tabs-overlay]');
-                    const tabsButton = tabsSwitch.querySelector('[data-tabs-button]');
+                    const tabsPrev = tabsSwitch.querySelector('.js-tabs-prev');
+                    const tabsNext = tabsSwitch.querySelector('.js-tabs-next');
+                    const tabCurrent = tabsSwitch.querySelector(`.js-tabs-item[data-tabs-id="${target.getAttribute('data-tabs-switch-pane')}"]`);
+                    const tabsBackdrop = tabsSwitch.querySelector('.js-tabs-backdrop');
+                    const tabsButton = tabsSwitch.querySelector('.js-tabs-button');
 
                     if (tabCurrent) {
                         moveTab(tabsSwitch, tabCurrent, tabsButton);
-                        changeOverlay (tabsSwitch, tabsOverlay);
+                        changeBackdrop (tabsSwitch, tabsBackdrop);
                         isDisabledTabNavigation(tabsSwitch, tabsPrev, tabsNext);
                     }
                 }
             }
 
-            if (!target.hasAttribute('data-tabs-button') && !target.closest('[data-tabs-button]')) {
+            if (!target.classList.contains('js-tabs-button') && !target.closest('.js-tabs-button')) {
                 closeTabsList();
             }
         });

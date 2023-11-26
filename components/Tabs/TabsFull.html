@@ -1,22 +1,22 @@
-<div class="tabs" data-tabs="tabs">
-	<div class="tabs__menu tabs-menu" data-tabs-menu>
+<div class="tabs js-tabs">
+	<div class="tabs__menu tabs-menu js-tabs-menu">
 		<div class="tabs-menu__inner">
-			<button class="tabs-menu__nav tabs-menu__nav_prev" type="button" data-tabs-prev>&lt;</button>
+			<button class="tabs-menu__nav tabs-menu__nav_prev js-tabs-prev" type="button">&lt;</button>
 			<div class="tabs-menu__content">
-				<button type="button" class="tabs-menu__button button" data-tabs-button>
-					<span data-tabs-button-text>Вкладка 1</span>
+				<button type="button" class="tabs-menu__button button js-tabs-button">
+					<span class="js-tabs-button-text">Вкладка 1</span>
 				</button>
-				<div class="tabs-menu__overlay" data-tabs-overlay></div>
-				<div class="tabs-menu__list" data-tabs-list>
-					<button type="button" class="tabs-menu__item is-active" data-tabs-item="tab_1" data-value="Вкладка 1"><span>Вкладка 1</span></button>
-					<button type="button" class="tabs-menu__item" data-tabs-item="tab_2" data-value="Вкладка 2"><span>Вкладка 2</span></button>
+				<div class="tabs-menu__backdrop js-tabs-backdrop"></div>
+				<div class="tabs-menu__list js-tabs-list">
+					<button type="button" class="tabs-menu__item  js-tabs-item is-active" data-tabs-id="tab_1" data-value="Вкладка 1"><span>Вкладка 1</span></button>
+					<button type="button" class="tabs-menu__item  js-tabs-item" data-tabs-id="tab_2" data-value="Вкладка 2"><span>Вкладка 2</span></button>
 				</div>
 			</div>
-			<button class="tabs-menu__nav tabs-menu__nav_next" type="button" data-tabs-next>&gt;</button>
+			<button class="tabs-menu__nav tabs-menu__nav_next js-tabs-next" type="button">&gt;</button>
 		</div>
 	</div>
 	<div class="tabs__content">
-		<div class="tabs__pane is-active" data-tabs-pane="tab_1">Содержимое_вкладки_1</div>
-		<div class="tabs__pane" data-tabs-pane="tab_2">Содержимое_вкладки_2</div>
+		<div class="tabs__pane js-tabs-pane is-active" data-tabs-pane="tab_1">Содержимое_вкладки_1</div>
+		<div class="tabs__pane js-tabs-pane" data-tabs-pane="tab_2">Содержимое_вкладки_2</div>
 	</div>
 </div>
